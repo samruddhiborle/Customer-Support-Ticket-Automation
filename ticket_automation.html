@@ -1,0 +1,2680 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Support Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <script>
+    window.tailwind = window.tailwind || {};
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Manrope", "sans-serif"],
+            display: ["Space Grotesk", "sans-serif"],
+          },
+          colors: {
+            primary: {
+              50: "#eef2ff",
+              100: "#e0e7ff",
+              500: "#6366f1",
+              600: "#4f46e5",
+              700: "#4338ca",
+            },
+          },
+          boxShadow: {
+            glow: "0 20px 60px -20px rgba(79, 70, 229, 0.45)",
+            soft: "0 18px 40px -20px rgba(15, 23, 42, 0.18)",
+          },
+        },
+      },
+    };
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root { color-scheme: light; }
+    .dark { color-scheme: dark; }
+    body {
+      font-family: "Manrope", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(99, 102, 241, 0.14), transparent 30%),
+        radial-gradient(circle at top right, rgba(34, 211, 238, 0.12), transparent 30%),
+        linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+    }
+    .dark body {
+      background:
+        radial-gradient(circle at top left, rgba(99, 102, 241, 0.18), transparent 30%),
+        radial-gradient(circle at top right, rgba(34, 211, 238, 0.16), transparent 30%),
+        linear-gradient(180deg, #020617 0%, #0f172a 100%);
+    }
+    .grid-mesh {
+      background-image:
+        linear-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+      background-size: 36px 36px;
+    }
+    .fade-in { animation: fadeIn 0.5s ease forwards; }
+    .slide-up { animation: slideUp 0.45s ease forwards; }
+    .float-slow { animation: floatSlow 6s ease-in-out infinite; }
+    .pulse-dot { animation: pulseDot 1.2s ease-in-out infinite; }
+    .typing span { animation: bounceDots 1.3s infinite ease-in-out; display: inline-block; }
+    .typing span:nth-child(2) { animation-delay: 0.18s; }
+    .typing span:nth-child(3) { animation-delay: 0.32s; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes floatSlow { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+    @keyframes pulseDot { 0%, 100% { opacity: 0.3; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1); } }
+    @keyframes bounceDots { 0%, 80%, 100% { transform: translateY(0); opacity: 0.5; } 40% { transform: translateY(-4px); opacity: 1; } }
+  </style>
+</head>
+<body class="min-h-screen text-slate-900 transition-colors duration-300 dark:text-slate-100">
+  <div class="fixed inset-0 -z-10 overflow-hidden">
+    <div class="absolute -left-24 top-16 h-72 w-72 rounded-full bg-indigo-500/20 blur-3xl"></div>
+    <div class="absolute right-0 top-0 h-80 w-80 rounded-full bg-cyan-400/20 blur-3xl"></div>
+    <div class="absolute bottom-12 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-fuchsia-400/10 blur-3xl"></div>
+  </div>
+
+  <section id="authScreen" class="relative min-h-screen overflow-hidden p-4 lg:p-8">
+    <div class="mx-auto grid min-h-[calc(100vh-2rem)] max-w-7xl overflow-hidden rounded-[2rem] border border-white/60 bg-white/80 shadow-soft backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/70 lg:grid-cols-[1.1fr_0.9fr]">
+      <div class="relative hidden overflow-hidden bg-slate-950 p-10 text-white lg:flex lg:flex-col lg:justify-between">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.45),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(34,211,238,0.28),transparent_28%)]"></div>
+        <div class="absolute inset-0 grid-mesh opacity-40"></div>
+        <div class="relative z-10 flex items-center gap-3">
+          <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 shadow-glow">
+            <i class="fa-solid fa-sparkles text-xl text-cyan-300"></i>
+          </div>
+          <div>
+            <p class="font-display text-2xl font-bold">AI Support Hub</p>
+            <p class="text-sm text-slate-300">Automate support. Delight customers.</p>
+          </div>
+        </div>
+
+        <div class="relative z-10 max-w-xl space-y-8">
+          <div class="space-y-4">
+            <span class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-cyan-200">
+              <span class="h-2 w-2 rounded-full bg-emerald-400 pulse-dot"></span>
+              AI triage active
+            </span>
+            <h1 class="font-display text-5xl font-bold leading-tight">
+              Turn every support request into a fast, intelligent workflow.
+            </h1>
+            <p class="max-w-lg text-lg text-slate-300">
+              Route tickets, generate replies, detect priority, and keep your agents in sync with a startup-grade dashboard built to impress.
+            </p>
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div class="float-slow rounded-3xl border border-white/10 bg-white/10 p-5 backdrop-blur-xl">
+              <div class="mb-3 flex items-center justify-between">
+                <span class="text-sm text-slate-300">Today</span>
+                <span class="rounded-full bg-emerald-400/15 px-3 py-1 text-xs font-semibold text-emerald-300">97% SLA</span>
+              </div>
+              <p class="text-3xl font-bold">184</p>
+              <p class="mt-2 text-sm text-slate-300">Tickets handled with AI-suggested actions and automated routing.</p>
+            </div>
+            <div class="translate-y-6 rounded-3xl border border-white/10 bg-white/10 p-5 backdrop-blur-xl">
+              <div class="mb-4 flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-cyan-300/15 text-cyan-200">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <div>
+                  <p class="font-semibold">Suggested Reply</p>
+                  <p class="text-xs text-slate-300">Generated in 2.4 seconds</p>
+                </div>
+              </div>
+              <p class="text-sm leading-6 text-slate-200">
+                We've prioritized your billing request and drafted a customer-friendly resolution for the agent to approve.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative z-10 flex items-center gap-8 text-sm text-slate-300">
+          <div>
+            <p class="text-2xl font-bold text-white">4.9/5</p>
+            <p>Agent satisfaction</p>
+          </div>
+          <div class="h-10 w-px bg-white/10"></div>
+          <div>
+            <p class="text-2xl font-bold text-white">36%</p>
+            <p>Faster resolution time</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative flex items-center justify-center bg-white/70 p-6 dark:bg-slate-950/70 lg:p-10">
+        <div class="w-full max-w-md space-y-8">
+          <div class="space-y-3 text-center lg:text-left">
+            <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600 shadow-soft dark:bg-indigo-500/15 dark:text-indigo-200 lg:mx-0">
+              <i class="fa-solid fa-headset text-xl"></i>
+            </div>
+            <div>
+              <h2 class="font-display text-3xl font-bold">Access Portal</h2>
+              <p id="authSubtitle" class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                Sign in to manage tickets, AI suggestions, and live support conversations.
+              </p>
+            </div>
+          </div>
+
+          <div class="inline-flex rounded-2xl border border-slate-200 bg-slate-100 p-1 dark:border-slate-800 dark:bg-slate-900">
+            <button id="loginModeBtn" class="rounded-xl bg-white px-5 py-2 text-sm font-semibold text-slate-900 shadow-sm transition dark:bg-slate-800 dark:text-white">Login</button>
+            <button id="signupModeBtn" class="rounded-xl px-5 py-2 text-sm font-semibold text-slate-500 transition dark:text-slate-400">Signup</button>
+          </div>
+
+          <form id="authForm" class="space-y-5 rounded-[2rem] border border-slate-200/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/80">
+            <div>
+              <label class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200" for="authEmail">Email</label>
+              <div class="relative">
+                <i class="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input id="authEmail" type="email" value="agent@aisupporthub.com" class="w-full rounded-2xl border border-slate-200 bg-white px-12 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:ring-indigo-500/20" placeholder="name@company.com" required />
+              </div>
+            </div>
+            <div>
+              <label class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200" for="authPassword">Password</label>
+              <div class="relative">
+                <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input id="authPassword" type="password" value="Password123" class="w-full rounded-2xl border border-slate-200 bg-white px-12 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:ring-indigo-500/20" placeholder="Enter your password" required />
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              <div class="flex items-center justify-between gap-3">
+                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-200">Continue As</label>
+                <span id="authRoleHelp" class="text-xs text-slate-500 dark:text-slate-400">Choose who is using the app</span>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <button id="authRoleUserBtn" type="button" class="rounded-[1.5rem] border border-slate-200 bg-white p-4 text-left transition hover:border-indigo-300 dark:border-slate-700 dark:bg-slate-950">
+                  <div class="flex items-center gap-3">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600 dark:bg-cyan-500/10 dark:text-cyan-200">
+                      <i class="fa-regular fa-message"></i>
+                    </div>
+                    <div>
+                      <p class="font-semibold">User</p>
+                      <p class="text-xs text-slate-500 dark:text-slate-400">Submit support queries</p>
+                    </div>
+                  </div>
+                </button>
+                <button id="authRoleAdminBtn" type="button" class="rounded-[1.5rem] border border-slate-200 bg-white p-4 text-left transition hover:border-indigo-300 dark:border-slate-700 dark:bg-slate-950">
+                  <div class="flex items-center gap-3">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-200">
+                      <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                      <p class="font-semibold">Admin</p>
+                      <p class="text-xs text-slate-500 dark:text-slate-400">Resolve what AI cannot</p>
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-sm">
+              <label class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                <input type="checkbox" checked class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
+                Keep me signed in
+              </label>
+              <button type="button" class="font-semibold text-indigo-600">Forgot password?</button>
+            </div>
+
+            <button id="authSubmitBtn" type="submit" class="w-full rounded-2xl bg-slate-950 px-4 py-3 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-500">
+              Login to Dashboard
+            </button>
+
+            <div class="flex items-center gap-4 text-xs uppercase tracking-[0.24em] text-slate-400">
+              <span class="h-px flex-1 bg-slate-200 dark:bg-slate-800"></span>
+              Demo Ready
+              <span class="h-px flex-1 bg-slate-200 dark:bg-slate-800"></span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <button type="button" class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold transition hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-950 dark:hover:border-indigo-500">
+                <i class="fa-brands fa-google mr-2"></i>Google
+              </button>
+              <button type="button" class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold transition hover:border-cyan-300 hover:text-cyan-600 dark:border-slate-700 dark:bg-slate-950 dark:hover:border-cyan-500">
+                <i class="fa-brands fa-slack mr-2"></i>Slack
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="appShell" class="hidden min-h-screen">
+    <div id="mobileSidebarBackdrop" class="fixed inset-0 z-30 hidden bg-slate-950/40 backdrop-blur-sm lg:hidden"></div>
+
+    <aside id="sidebar" class="fixed left-0 top-0 z-40 flex h-screen w-72 -translate-x-full flex-col border-r border-white/60 bg-white/80 p-6 shadow-soft backdrop-blur-xl transition-transform duration-300 dark:border-slate-800 dark:bg-slate-950/80 lg:translate-x-0">
+      <div class="flex items-center gap-3">
+        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-950 text-white shadow-glow dark:bg-indigo-600">
+          <i class="fa-solid fa-sparkles"></i>
+        </div>
+        <div>
+          <p class="font-display text-xl font-bold">AI Support Hub</p>
+          <p class="text-sm text-slate-500 dark:text-slate-400">Support Automation Suite</p>
+        </div>
+      </div>
+
+      <nav class="mt-10 space-y-2">
+        <button data-section="dashboard" class="nav-item flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold transition hover:bg-slate-100 dark:hover:bg-slate-900">
+          <i class="fa-solid fa-chart-pie w-5 text-center"></i>
+          Dashboard
+        </button>
+        <button data-section="tickets" class="nav-item flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold transition hover:bg-slate-100 dark:hover:bg-slate-900">
+          <i class="fa-solid fa-ticket w-5 text-center"></i>
+          My Tickets
+        </button>
+        <button data-section="create-ticket" class="nav-item flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold transition hover:bg-slate-100 dark:hover:bg-slate-900">
+          <i class="fa-solid fa-plus w-5 text-center"></i>
+          Create Ticket
+        </button>
+        <button data-section="chat" class="nav-item flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold transition hover:bg-slate-100 dark:hover:bg-slate-900">
+          <i class="fa-solid fa-comments w-5 text-center"></i>
+          Chat
+        </button>
+        <button data-section="analytics" class="nav-item flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold transition hover:bg-slate-100 dark:hover:bg-slate-900">
+          <i class="fa-solid fa-chart-line w-5 text-center"></i>
+          Analytics
+        </button>
+        <button data-section="settings" class="nav-item flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold transition hover:bg-slate-100 dark:hover:bg-slate-900">
+          <i class="fa-solid fa-gear w-5 text-center"></i>
+          Settings
+        </button>
+      </nav>
+
+      <div class="mt-auto rounded-[1.75rem] bg-slate-950 p-5 text-white shadow-glow dark:bg-gradient-to-br dark:from-indigo-600 dark:to-cyan-500">
+        <div class="mb-4 flex items-start justify-between">
+          <div>
+            <p class="text-sm text-white/70">AI Automation</p>
+            <p class="mt-1 text-lg font-bold">Smart Triage Online</p>
+          </div>
+          <span class="rounded-full bg-white/15 px-3 py-1 text-xs">Live</span>
+        </div>
+        <p class="text-sm leading-6 text-white/80">
+          18 tickets auto-sorted today with 92% confidence.
+        </p>
+      </div>
+    </aside>
+
+    <div class="lg:pl-72">
+      <header class="sticky top-0 z-20 border-b border-white/60 bg-white/70 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/70">
+        <div class="flex items-center gap-3 px-4 py-4 sm:px-6 lg:px-8">
+          <button id="openSidebarBtn" class="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-700 transition hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 lg:hidden">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+
+          <div class="relative hidden flex-1 md:block">
+            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input id="globalSearch" type="text" placeholder="Search tickets, conversations, customers..." class="w-full rounded-2xl border border-slate-200 bg-white px-12 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-indigo-500/20" />
+          </div>
+
+          <div class="ml-auto flex items-center gap-3">
+            <div class="hidden rounded-2xl border border-slate-200 bg-white p-1 dark:border-slate-800 dark:bg-slate-900 md:inline-flex">
+              <button id="liveUserViewBtn" class="rounded-xl px-4 py-2 text-xs font-semibold transition">User View</button>
+              <button id="liveAdminViewBtn" class="rounded-xl px-4 py-2 text-xs font-semibold transition">Admin View</button>
+            </div>
+
+            <button id="darkModeBtn" class="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-700 transition hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200">
+              <i class="fa-solid fa-moon"></i>
+            </button>
+
+            <div class="relative">
+              <button id="notificationsBtn" class="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-700 transition hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200">
+                <i class="fa-regular fa-bell"></i>
+                <span class="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-rose-500"></span>
+              </button>
+
+              <div id="notificationsPanel" class="absolute right-0 mt-3 hidden w-[22rem] rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+                <div class="mb-4 flex items-center justify-between">
+                  <h3 class="font-display text-lg font-bold">Notifications</h3>
+                  <span class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-200">4 new</span>
+                </div>
+                <div id="notificationsList" class="space-y-3"></div>
+              </div>
+            </div>
+
+            <div class="relative">
+              <button id="profileBtn" class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-3 py-2 transition hover:border-indigo-300 dark:border-slate-800 dark:bg-slate-900">
+                <img id="profileAvatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80" alt="Profile avatar" class="h-10 w-10 rounded-2xl object-cover" />
+                <div class="hidden text-left sm:block">
+                  <p id="profileName" class="text-sm font-semibold">Maya Chen</p>
+                  <p id="profileRoleLabel" class="text-xs text-slate-500 dark:text-slate-400">Support Lead</p>
+                </div>
+                <i class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
+              </button>
+
+              <div id="profileMenu" class="absolute right-0 mt-3 hidden w-56 rounded-[1.5rem] border border-slate-200 bg-white p-2 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+                <button id="profileMenuBtn" class="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold transition hover:bg-slate-100 dark:hover:bg-slate-800">
+                  <i class="fa-regular fa-user text-slate-400"></i> My Profile
+                </button>
+                <button id="securityMenuBtn" class="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold transition hover:bg-slate-100 dark:hover:bg-slate-800">
+                  <i class="fa-solid fa-shield-halved text-slate-400"></i> Security
+                </button>
+                <button id="logoutBtn" class="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold text-rose-500 transition hover:bg-rose-50 dark:hover:bg-rose-500/10">
+                  <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="relative p-4 sm:p-6 lg:p-8">
+        <div id="contentSkeleton" class="hidden space-y-6 fade-in">
+          <div class="h-24 animate-pulse rounded-[2rem] bg-white/70 dark:bg-slate-900/70"></div>
+          <div class="grid gap-6 xl:grid-cols-4">
+            <div class="h-36 animate-pulse rounded-[2rem] bg-white/70 dark:bg-slate-900/70"></div>
+            <div class="h-36 animate-pulse rounded-[2rem] bg-white/70 dark:bg-slate-900/70"></div>
+            <div class="h-36 animate-pulse rounded-[2rem] bg-white/70 dark:bg-slate-900/70"></div>
+            <div class="h-36 animate-pulse rounded-[2rem] bg-white/70 dark:bg-slate-900/70"></div>
+          </div>
+          <div class="grid gap-6 xl:grid-cols-[1.5fr_1fr]">
+            <div class="h-96 animate-pulse rounded-[2rem] bg-white/70 dark:bg-slate-900/70"></div>
+            <div class="h-96 animate-pulse rounded-[2rem] bg-white/70 dark:bg-slate-900/70"></div>
+          </div>
+        </div>
+
+        <section id="dashboardSection" class="page-section space-y-6">
+          <div class="slide-up rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+            <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <p class="text-sm font-semibold uppercase tracking-[0.22em] text-indigo-600 dark:text-indigo-300">Overview</p>
+                <h1 class="mt-2 font-display text-3xl font-bold">Welcome back, Maya</h1>
+                <p class="mt-2 max-w-2xl text-sm text-slate-500 dark:text-slate-400">
+                  Your AI queue is healthy, first response times are improving, and high-priority tickets are being surfaced automatically.
+                </p>
+              </div>
+              <div class="flex flex-wrap gap-3">
+                <button id="openCreateFromDashboard" class="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-500">
+                  Create Ticket
+                </button>
+                <button id="howItWorksBtn" class="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold transition hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-950">
+                  How It Works
+                </button>
+                <button id="exportReportBtn" class="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold transition hover:border-cyan-300 hover:text-cyan-600 dark:border-slate-700 dark:bg-slate-950">
+                  Export Report
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div id="statsGrid" class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4"></div>
+
+          <div class="grid gap-6 xl:grid-cols-[1.65fr_1fr]">
+            <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+              <div class="mb-6 flex items-center justify-between">
+                <div>
+                  <h2 class="font-display text-xl font-bold">Ticket Overview</h2>
+                  <p class="text-sm text-slate-500 dark:text-slate-400">Volume, resolutions, and response trends</p>
+                </div>
+                <span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300">+14% this week</span>
+              </div>
+              <div class="h-80">
+                <canvas id="dashboardChart"></canvas>
+              </div>
+            </div>
+
+            <div class="space-y-6">
+              <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+                <div class="mb-5">
+                  <h2 class="font-display text-xl font-bold">Recent Activity</h2>
+                  <p class="text-sm text-slate-500 dark:text-slate-400">Live updates across the support team</p>
+                </div>
+                <div id="activityFeed" class="space-y-4"></div>
+              </div>
+
+              <div class="rounded-[2rem] border border-indigo-200 bg-gradient-to-br from-indigo-600 to-cyan-500 p-6 text-white shadow-glow dark:border-indigo-500/20">
+                <div class="mb-4 flex items-center gap-3">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15">
+                    <i class="fa-solid fa-robot"></i>
+                  </div>
+                  <div>
+                    <p class="text-sm text-white/70">AI Copilot</p>
+                    <p class="font-display text-xl font-bold">Suggested next step</p>
+                  </div>
+                </div>
+                <p class="text-sm leading-7 text-white/90">
+                  Escalate the payment gateway incident to engineering and auto-send the prepared ETA update to all affected customers.
+                </p>
+                <button class="mt-5 rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition hover:-translate-y-0.5">
+                  Run Suggested Action
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="ticketsSection" class="page-section hidden space-y-6">
+          <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <p class="text-sm font-semibold uppercase tracking-[0.22em] text-indigo-600 dark:text-indigo-300">Tickets</p>
+                <h2 class="mt-2 font-display text-3xl font-bold">My Tickets</h2>
+                <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                  Search, filter, and review live support issues with AI-priority signals.
+                </p>
+              </div>
+              <button id="createTicketShortcut" class="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-500">
+                New Ticket
+              </button>
+            </div>
+
+            <div class="mt-6 grid gap-4 lg:grid-cols-[1.2fr_0.8fr_0.8fr]">
+              <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input id="ticketSearchInput" type="text" placeholder="Search by title or category" class="w-full rounded-2xl border border-slate-200 bg-white px-12 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:focus:ring-indigo-500/20" />
+              </div>
+              <select id="statusFilter" class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:focus:ring-indigo-500/20">
+                <option value="all">All Statuses</option>
+                <option value="Open">Open</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Resolved">Resolved</option>
+              </select>
+              <select id="priorityFilter" class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:focus:ring-indigo-500/20">
+                <option value="all">All Priorities</option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+                <option value="Critical">Critical</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="rounded-[2rem] border border-white/70 bg-white/80 p-4 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+            <div class="hidden overflow-x-auto lg:block">
+              <table class="min-w-full text-left">
+                <thead class="text-xs uppercase tracking-[0.22em] text-slate-400">
+                  <tr>
+                    <th class="px-4 py-4">Title</th>
+                    <th class="px-4 py-4">Category</th>
+                    <th class="px-4 py-4">Priority</th>
+                    <th class="px-4 py-4">Status</th>
+                    <th class="px-4 py-4">Date</th>
+                    <th class="px-4 py-4 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="ticketTableBody" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+              </table>
+            </div>
+            <div id="ticketCards" class="grid gap-4 lg:hidden"></div>
+            <div id="ticketEmptyState" class="hidden px-4 py-12 text-center">
+              <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-200">
+                <i class="fa-solid fa-inbox text-2xl"></i>
+              </div>
+              <h3 class="mt-5 font-display text-2xl font-bold">No tickets match your filters</h3>
+              <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                Try adjusting the search or filters, or create a fresh support ticket.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="ticketDetailsSection" class="page-section hidden space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <button id="backToTicketsBtn" class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold transition hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-800 dark:bg-slate-900">
+              <i class="fa-solid fa-arrow-left mr-2"></i>Back to Tickets
+            </button>
+            <div class="flex flex-wrap gap-3">
+              <button id="useAiSuggestionBtn" class="rounded-2xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-500">
+                Use Suggestion
+              </button>
+              <button class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold transition hover:border-cyan-300 hover:text-cyan-600 dark:border-slate-800 dark:bg-slate-900">
+                Assign Agent
+              </button>
+            </div>
+          </div>
+
+          <div class="grid gap-6 xl:grid-cols-[1.35fr_0.85fr]">
+            <div class="space-y-6">
+              <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+                <div id="ticketDetailsHeader" class="space-y-5"></div>
+                <div class="mt-8">
+                  <h3 class="font-display text-lg font-bold">Resolution Tracker</h3>
+                  <div id="statusTracker" class="mt-5 grid gap-4 md:grid-cols-3"></div>
+                </div>
+              </div>
+
+              <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+                <div class="mb-5">
+                  <h3 class="font-display text-lg font-bold">Activity Timeline</h3>
+                  <p class="text-sm text-slate-500 dark:text-slate-400">Who touched the ticket and what happened next</p>
+                </div>
+                <div id="ticketTimeline" class="space-y-5"></div>
+              </div>
+            </div>
+
+            <div class="space-y-6">
+              <div class="rounded-[2rem] border border-indigo-200 bg-gradient-to-br from-indigo-600 to-cyan-500 p-6 text-white shadow-glow dark:border-indigo-500/20">
+                <div class="mb-5 flex items-center gap-3">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15">
+                    <i class="fa-solid fa-brain"></i>
+                  </div>
+                  <div>
+                    <p class="text-sm text-white/70">AI Insight Panel</p>
+                    <p class="font-display text-xl font-bold">Suggested actions</p>
+                  </div>
+                </div>
+                <div id="aiInsightBadges" class="flex flex-wrap gap-3"></div>
+                <div class="mt-5 rounded-3xl bg-white/10 p-4 backdrop-blur-xl">
+                  <div class="mb-3 flex items-center justify-between">
+                    <p class="font-semibold">Suggested Reply</p>
+                    <span id="autoResolveBadge" class="rounded-full bg-emerald-400/15 px-3 py-1 text-xs font-semibold text-emerald-200">Auto-resolve available</span>
+                  </div>
+                  <p id="aiSuggestedReply" class="text-sm leading-7 text-white/90"></p>
+                </div>
+                <div id="aiThinkingState" class="mt-4 hidden rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm">
+                  <span class="typing">
+                    AI is thinking<span>.</span><span>.</span><span>.</span>
+                  </span>
+                </div>
+              </div>
+
+              <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+                <h3 class="font-display text-lg font-bold">Ticket Context</h3>
+                <div id="ticketContext" class="mt-4 space-y-4"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="create-ticketSection" class="page-section hidden space-y-6">
+          <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+            <p class="text-sm font-semibold uppercase tracking-[0.22em] text-indigo-600 dark:text-indigo-300">Create</p>
+            <h2 class="mt-2 font-display text-3xl font-bold">Create New Ticket</h2>
+            <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+              Capture the issue, attach context, and let AI recommend the right routing before submission.
+            </p>
+          </div>
+
+          <div class="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+            <form id="createTicketForm" class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+              <div class="grid gap-5">
+                <div>
+                  <div class="mb-2 flex flex-wrap items-center justify-between gap-3">
+                    <label class="block text-sm font-semibold" for="ticketTitleInput">Title</label>
+                    <button id="voiceTitleBtn" type="button" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold transition hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-800 dark:bg-slate-950">
+                      <i class="fa-solid fa-microphone"></i>
+                      Voice Title
+                    </button>
+                  </div>
+                  <input id="ticketTitleInput" type="text" class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:focus:ring-indigo-500/20" placeholder="Example: Customer charged twice after renewal" required />
+                </div>
+
+                <div>
+                  <div class="mb-2 flex flex-wrap items-center justify-between gap-3">
+                    <label class="block text-sm font-semibold" for="ticketDescriptionInput">Description</label>
+                    <div class="flex items-center gap-3">
+                      <span id="voiceInputStatus" class="text-xs text-slate-500 dark:text-slate-400">Voice input ready</span>
+                      <button id="voiceInputBtn" type="button" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold transition hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-800 dark:bg-slate-950">
+                        <i class="fa-solid fa-microphone"></i>
+                        Speak
+                      </button>
+                    </div>
+                  </div>
+                  <textarea id="ticketDescriptionInput" rows="6" class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:focus:ring-indigo-500/20" placeholder="Describe the issue, customer context, and expected resolution..." required></textarea>
+                </div>
+
+                <div class="grid gap-5 md:grid-cols-2">
+                  <div>
+                    <label class="mb-2 block text-sm font-semibold" for="ticketCategorySelect">Category</label>
+                    <select id="ticketCategorySelect" class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:focus:ring-indigo-500/20">
+                      <option>Billing</option>
+                      <option>Technical</option>
+                      <option>Feature Request</option>
+                      <option>Account</option>
+                      <option>General</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="mb-2 block text-sm font-semibold" for="ticketPrioritySelect">Priority</label>
+                    <select id="ticketPrioritySelect" class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:focus:ring-indigo-500/20">
+                      <option>Low</option>
+                      <option selected>Medium</option>
+                      <option>High</option>
+                      <option>Critical</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="mb-2 block text-sm font-semibold">Attachment</label>
+                  <label for="ticketFileUpload" class="flex cursor-pointer flex-col items-center justify-center rounded-[1.75rem] border border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-center transition hover:border-indigo-400 hover:bg-indigo-50/60 dark:border-slate-700 dark:bg-slate-950 dark:hover:border-indigo-500 dark:hover:bg-indigo-500/5">
+                    <i class="fa-solid fa-cloud-arrow-up text-2xl text-indigo-500"></i>
+                    <p class="mt-3 text-sm font-semibold">Upload screenshot or log file</p>
+                    <p id="uploadedFileName" class="mt-1 text-xs text-slate-500 dark:text-slate-400">PNG, JPG, PDF up to 10MB</p>
+                    <input id="ticketFileUpload" type="file" class="hidden" />
+                  </label>
+                </div>
+
+                <div class="flex flex-wrap gap-3">
+                  <button type="submit" class="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-500">
+                    Submit Ticket
+                  </button>
+                  <button type="button" id="autofillSampleBtn" class="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold transition hover:border-cyan-300 hover:text-cyan-600 dark:border-slate-800 dark:bg-slate-950">
+                    Autofill Demo
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <div class="space-y-6">
+              <div class="rounded-[2rem] border border-indigo-200 bg-gradient-to-br from-slate-950 via-indigo-700 to-cyan-500 p-6 text-white shadow-glow dark:border-indigo-500/20">
+                <div class="mb-5 flex items-center gap-3">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                  </div>
+                  <div>
+                    <p class="text-sm text-white/70">AI Intake Assistant</p>
+                    <p class="font-display text-xl font-bold">Live analysis</p>
+                  </div>
+                </div>
+                <div id="createAiSignals" class="grid gap-3"></div>
+                <div class="mt-5 rounded-3xl bg-white/10 p-4">
+                  <p class="text-sm font-semibold text-white">Draft recommendation</p>
+                  <p id="createAiSummary" class="mt-2 text-sm leading-7 text-white/85">
+                    Start typing to see AI-detected category, urgency, sentiment, and automation opportunities.
+                  </p>
+                </div>
+              </div>
+
+              <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+                <h3 class="font-display text-lg font-bold">Best practice checklist</h3>
+                <div class="mt-4 space-y-3 text-sm text-slate-500 dark:text-slate-400">
+                  <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-circle-check text-emerald-500"></i>
+                    Add customer impact details and exact reproduction steps.
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-circle-check text-emerald-500"></i>
+                    Include screenshots or logs for technical incidents.
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-circle-check text-emerald-500"></i>
+                    Use AI suggestions to prefill routing and response tone.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="chatSection" class="page-section hidden space-y-6">
+          <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+            <p class="text-sm font-semibold uppercase tracking-[0.22em] text-indigo-600 dark:text-indigo-300">Conversations</p>
+            <h2 class="mt-2 font-display text-3xl font-bold">Customer Chat</h2>
+            <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+              Manage agent-to-customer conversations and use AI-suggested responses to move faster.
+            </p>
+          </div>
+
+          <div class="grid gap-6 xl:grid-cols-[0.9fr_1.4fr]">
+            <div class="rounded-[2rem] border border-white/70 bg-white/80 p-4 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+              <div class="mb-4 px-2">
+                <div class="relative">
+                  <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                  <input id="conversationSearchInput" type="text" placeholder="Search conversations" class="w-full rounded-2xl border border-slate-200 bg-white px-12 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:focus:ring-indigo-500/20" />
+                </div>
+              </div>
+              <div id="conversationList" class="space-y-2"></div>
+            </div>
+
+            <div class="rounded-[2rem] border border-white/70 bg-white/80 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+              <div id="chatHeader" class="flex items-center justify-between border-b border-slate-100 px-6 py-5 dark:border-slate-800"></div>
+              <div id="chatMessages" class="h-[28rem] space-y-4 overflow-y-auto px-6 py-6"></div>
+              <div id="chatTypingIndicator" class="hidden px-6 pb-3 text-sm text-slate-500 dark:text-slate-400">
+                <span class="typing">
+                  AI is thinking<span>.</span><span>.</span><span>.</span>
+                </span>
+              </div>
+              <div class="border-t border-slate-100 p-4 dark:border-slate-800">
+                <div class="mb-3 flex flex-wrap gap-3">
+                  <button id="chatSuggestionBtn" class="rounded-2xl border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-200">
+                    AI Suggestion
+                  </button>
+                  <button class="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold transition hover:border-cyan-300 hover:text-cyan-600 dark:border-slate-800 dark:bg-slate-950">
+                    Attach File
+                  </button>
+                </div>
+                <form id="chatForm" class="flex flex-col gap-3 sm:flex-row">
+                  <input id="chatInput" type="text" placeholder="Write a helpful reply..." class="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:focus:ring-indigo-500/20" />
+                  <button type="submit" class="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-500">
+                    Send
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="analyticsSection" class="page-section hidden space-y-6">
+          <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+            <p class="text-sm font-semibold uppercase tracking-[0.22em] text-indigo-600 dark:text-indigo-300">Insights</p>
+            <h2 class="mt-2 font-display text-3xl font-bold">Support Analytics</h2>
+            <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+              Understand volume, response speed, and resolution quality with demo-ready metrics.
+            </p>
+          </div>
+
+          <div class="grid gap-6 xl:grid-cols-3">
+            <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75 xl:col-span-2">
+              <div class="mb-5">
+                <h3 class="font-display text-xl font-bold">Tickets Over Time</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Weekly inbound and resolved trends</p>
+              </div>
+              <div class="h-80">
+                <canvas id="ticketsTimeChart"></canvas>
+              </div>
+            </div>
+
+            <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+              <div class="mb-5">
+                <h3 class="font-display text-xl font-bold">Resolution Rate</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400">AI-assisted completion quality</p>
+              </div>
+              <div class="h-80">
+                <canvas id="resolutionRateChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
+            <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+              <div class="mb-5">
+                <h3 class="font-display text-xl font-bold">Average Response Time</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Minutes to first touch by channel</p>
+              </div>
+              <div class="h-80">
+                <canvas id="responseTimeChart"></canvas>
+              </div>
+            </div>
+
+            <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+              <h3 class="font-display text-xl font-bold">Performance Highlights</h3>
+              <div class="mt-5 space-y-4">
+                <div class="rounded-3xl bg-slate-50 p-4 dark:bg-slate-950">
+                  <p class="text-sm text-slate-500 dark:text-slate-400">Automation Coverage</p>
+                  <p class="mt-2 text-3xl font-bold">68%</p>
+                </div>
+                <div class="rounded-3xl bg-slate-50 p-4 dark:bg-slate-950">
+                  <p class="text-sm text-slate-500 dark:text-slate-400">CSAT Improvement</p>
+                  <p class="mt-2 text-3xl font-bold">+12%</p>
+                </div>
+                <div class="rounded-3xl bg-slate-50 p-4 dark:bg-slate-950">
+                  <p class="text-sm text-slate-500 dark:text-slate-400">Auto-Resolved</p>
+                  <p class="mt-2 text-3xl font-bold">41 tickets</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="settingsSection" class="page-section hidden space-y-6">
+          <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+            <p class="text-sm font-semibold uppercase tracking-[0.22em] text-indigo-600 dark:text-indigo-300">Workspace</p>
+            <h2 class="mt-2 font-display text-3xl font-bold">Settings</h2>
+            <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+              Configure automation rules, team preferences, and notification behavior.
+            </p>
+          </div>
+
+          <div class="grid gap-6 xl:grid-cols-2">
+            <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+              <h3 class="font-display text-xl font-bold">Automation Preferences</h3>
+              <div class="mt-6 space-y-5">
+                <label class="flex items-center justify-between rounded-3xl bg-slate-50 px-4 py-4 dark:bg-slate-950">
+                  <div>
+                    <p class="font-semibold">AI category detection</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Predict category on ticket intake</p>
+                  </div>
+                  <input type="checkbox" checked class="h-5 w-5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
+                </label>
+                <label class="flex items-center justify-between rounded-3xl bg-slate-50 px-4 py-4 dark:bg-slate-950">
+                  <div>
+                    <p class="font-semibold">Auto-prioritize urgent tickets</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Escalate incidents based on impact cues</p>
+                  </div>
+                  <input type="checkbox" checked class="h-5 w-5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
+                </label>
+                <label class="flex items-center justify-between rounded-3xl bg-slate-50 px-4 py-4 dark:bg-slate-950">
+                  <div>
+                    <p class="font-semibold">Auto-draft replies</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Prepare a response for agent review</p>
+                  </div>
+                  <input type="checkbox" checked class="h-5 w-5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
+                </label>
+              </div>
+            </div>
+
+            <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+              <h3 class="font-display text-xl font-bold">Team Settings</h3>
+              <div class="mt-6 space-y-5">
+                <div>
+                  <label class="mb-2 block text-sm font-semibold">Default queue</label>
+                  <select class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:focus:ring-indigo-500/20">
+                    <option>General Support</option>
+                    <option>Priority Response</option>
+                    <option>Technical Escalations</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="mb-2 block text-sm font-semibold">Business hours</label>
+                  <input type="text" value="Mon-Fri, 9:00 AM - 6:00 PM" class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:focus:ring-indigo-500/20" />
+                </div>
+                <div>
+                  <label class="mb-2 block text-sm font-semibold">Escalation contact</label>
+                  <input type="email" value="ops@aisupporthub.com" class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:focus:ring-indigo-500/20" />
+                </div>
+                <button class="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-500">
+                  Save Preferences
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="fixed bottom-6 right-6 z-50">
+      <div id="chatbotWindow" class="mb-4 hidden w-[22rem] overflow-hidden rounded-[2rem] border border-white/70 bg-white/90 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/90">
+        <div class="bg-gradient-to-r from-indigo-600 to-cyan-500 px-5 py-4 text-white">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="font-display text-lg font-bold">AI Help Bot</p>
+              <p class="text-sm text-white/75">Instant FAQ and ticket help</p>
+            </div>
+            <button id="closeChatbotBtn" class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/15">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        </div>
+        <div class="space-y-4 p-5">
+          <div class="rounded-3xl bg-slate-50 p-4 text-sm leading-7 text-slate-600 dark:bg-slate-950 dark:text-slate-300">
+            Hi, I can answer FAQs, suggest next steps, or open a new support ticket for you.
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button class="faq-btn rounded-full bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-200">Billing issue</button>
+            <button class="faq-btn rounded-full bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-600 dark:bg-cyan-500/10 dark:text-cyan-200">Reset password</button>
+            <button class="faq-btn rounded-full bg-fuchsia-50 px-4 py-2 text-sm font-semibold text-fuchsia-600 dark:bg-fuchsia-500/10 dark:text-fuchsia-200">Downtime</button>
+          </div>
+          <div id="chatbotMessages" class="max-h-72 space-y-3 overflow-y-auto text-sm"></div>
+          <form id="chatbotForm" class="space-y-3">
+            <div class="relative">
+              <i class="fa-solid fa-sparkles absolute left-4 top-1/2 -translate-y-1/2 text-indigo-400"></i>
+              <input id="chatbotInput" type="text" placeholder="Ask Copilot anything about your support issue..." class="w-full rounded-2xl border border-slate-200 bg-white px-12 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:focus:ring-indigo-500/20" />
+            </div>
+            <button id="chatbotSendBtn" type="submit" class="w-full rounded-2xl border border-indigo-200 bg-indigo-50 px-4 py-3 font-semibold text-indigo-700 transition hover:bg-indigo-100 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-100">
+              Ask Copilot
+            </button>
+          </form>
+          <button id="chatbotCreateTicketBtn" class="w-full rounded-2xl bg-slate-950 px-4 py-3 font-semibold text-white transition hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-500">
+            Create Ticket
+          </button>
+        </div>
+      </div>
+
+      <button id="chatbotToggle" class="flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-indigo-600 to-cyan-500 text-xl text-white shadow-glow transition hover:-translate-y-1">
+        <i class="fa-solid fa-comment-dots"></i>
+      </button>
+    </div>
+  </div>
+
+  <div id="guideModal" class="fixed inset-0 z-[70] hidden items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm">
+    <div class="w-full max-w-3xl rounded-[2rem] border border-white/10 bg-white/95 p-6 shadow-soft dark:border-slate-800 dark:bg-slate-950/95">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-[0.22em] text-indigo-600 dark:text-indigo-300">First-Time Guide</p>
+          <h3 class="mt-2 font-display text-3xl font-bold">How AI Support Hub works</h3>
+          <p id="guideIntro" class="mt-2 text-sm text-slate-500 dark:text-slate-400">Learn the flow from question intake to AI-assisted resolution.</p>
+        </div>
+        <button data-close-modal="guideModal" class="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div id="guideProgress" class="mt-6 flex flex-wrap gap-2"></div>
+      <div class="mt-6 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <div class="rounded-[1.75rem] bg-slate-50 p-5 dark:bg-slate-900">
+          <div class="flex items-center justify-between gap-3">
+            <div>
+              <p id="guideStepLabel" class="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-300">Step 1</p>
+              <h4 id="guideStepTitle" class="mt-2 font-display text-2xl font-bold">Choose your path</h4>
+            </div>
+            <span id="guideStepBadge" class="rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-200">Interactive</span>
+          </div>
+          <p id="guideStepBody" class="mt-4 text-sm leading-7 text-slate-500 dark:text-slate-400"></p>
+          <div id="guideStepTips" class="mt-5 space-y-3"></div>
+        </div>
+        <div class="space-y-4">
+          <div class="rounded-[1.75rem] bg-gradient-to-br from-indigo-600 to-cyan-500 p-5 text-white">
+            <p class="text-sm text-white/75">Recommended action</p>
+            <h4 id="guideActionTitle" class="mt-2 font-display text-2xl font-bold">Open ticket intake</h4>
+            <p id="guideActionBody" class="mt-3 text-sm leading-7 text-white/85"></p>
+            <div class="mt-5 flex flex-wrap gap-3">
+              <button id="guideActionBtn" class="rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition hover:-translate-y-0.5">Try it now</button>
+              <button id="guideSecondaryBtn" class="rounded-2xl border border-white/20 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10">Skip for now</button>
+            </div>
+          </div>
+          <div id="guideRewardCard" class="rounded-[1.75rem] border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">Why people come back</p>
+            <p class="mt-3 text-sm leading-7 text-slate-500 dark:text-slate-400">
+              Fast AI triage, live updates, and one place for every query make repeat use effortless.
+            </p>
+          </div>
+          <div class="flex items-center justify-between gap-3">
+            <button id="guidePrevBtn" class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold transition hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-800 dark:bg-slate-900">Previous</button>
+            <button id="guideNextBtn" class="rounded-2xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-500">Next Step</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="profileModal" class="fixed inset-0 z-[70] hidden items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm">
+    <div class="w-full max-w-2xl rounded-[2rem] border border-white/10 bg-white/95 p-6 shadow-soft dark:border-slate-800 dark:bg-slate-950/95">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-[0.22em] text-indigo-600 dark:text-indigo-300">Profile</p>
+          <h3 class="mt-2 font-display text-3xl font-bold">Workspace identity</h3>
+          <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Role-based profile details for the active demo session.</p>
+        </div>
+        <button data-close-modal="profileModal" class="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div id="profileModalContent" class="mt-6 grid gap-4 md:grid-cols-2"></div>
+    </div>
+  </div>
+
+  <div id="securityModal" class="fixed inset-0 z-[70] hidden items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm">
+    <div class="w-full max-w-2xl rounded-[2rem] border border-white/10 bg-white/95 p-6 shadow-soft dark:border-slate-800 dark:bg-slate-950/95">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-[0.22em] text-indigo-600 dark:text-indigo-300">Security</p>
+          <h3 class="mt-2 font-display text-3xl font-bold">Access and safeguards</h3>
+          <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Security posture for the current user role and workspace.</p>
+        </div>
+        <button data-close-modal="securityModal" class="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div id="securityModalContent" class="mt-6 space-y-4"></div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="pointer-events-none fixed right-4 top-4 z-[60] flex w-full max-w-sm flex-col gap-3"></div>
+
+  <script>
+    const state = {
+      authMode: "login",
+      authRole: "admin",
+      profiles: {
+        user: {
+          name: "Aarav Mehta",
+          roleLabel: "Customer Workspace User",
+          email: "aarav@customerdemo.com",
+          avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80",
+          landingSection: "create-ticket",
+        },
+        admin: {
+          name: "Maya Chen",
+          roleLabel: "Support Lead",
+          email: "agent@aisupporthub.com",
+          avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80",
+          landingSection: "dashboard",
+        },
+      },
+      currentSection: "dashboard",
+      selectedTicketId: 1024,
+      activeConversationId: 1,
+      ticketSearch: "",
+      ticketStatus: "all",
+      ticketPriority: "all",
+      conversationSearch: "",
+      guideStep: 0,
+      voiceListening: false,
+      voiceTarget: "description",
+      activeRecognition: null,
+      darkMode: false,
+      charts: {},
+      chatbotHistory: [
+        { sender: "bot", text: "Copilot is ready. Ask about billing, outages, access, or ask me to create a ticket." }
+      ],
+      tickets: [
+        {
+          id: 1024,
+          title: "Payment failed after annual renewal",
+          category: "Billing",
+          priority: "High",
+          status: "In Progress",
+          date: "Apr 07, 2026",
+          customer: "Acme Labs",
+          owner: "Maya Chen",
+          sentiment: "Negative",
+          autoResolve: false,
+          description: "Customer reports duplicate charge alerts after their yearly renewal. The payment gateway returned a success response, but the billing UI still shows payment pending.",
+          aiCategory: "Billing",
+          responseTime: "12 min",
+          suggestion: "Hi there, thanks for flagging this. We've confirmed the renewal reached our payment gateway and are now reconciling the duplicate charge alert. I've escalated this to billing operations and will update you within the hour.",
+          timeline: [
+            { time: "10:12 AM", title: "Ticket created", body: "Customer submitted billing issue through in-app support." },
+            { time: "10:15 AM", title: "AI triage completed", body: "Detected billing category with high urgency and negative sentiment." },
+            { time: "10:23 AM", title: "Assigned to Maya Chen", body: "Routing rules moved the request into Priority Response queue." }
+          ],
+        },
+        {
+          id: 1025,
+          title: "App dashboard not loading on Safari",
+          category: "Technical",
+          priority: "Critical",
+          status: "Open",
+          date: "Apr 07, 2026",
+          customer: "Northwind Ops",
+          owner: "Unassigned",
+          sentiment: "Negative",
+          autoResolve: false,
+          description: "Dashboard remains blank on Safari 18 after login. Customer attached console errors and notes that Chrome works normally.",
+          aiCategory: "Technical",
+          responseTime: "6 min",
+          suggestion: "Thanks for the detailed report. We're investigating a Safari-specific rendering issue and have routed your case directly to engineering with high priority. We'll share a workaround or fix ETA shortly.",
+          timeline: [
+            { time: "09:42 AM", title: "Ticket created", body: "Technical incident captured via chatbot escalation." },
+            { time: "09:45 AM", title: "Priority boosted", body: "AI escalated based on outage and browser keywords." },
+            { time: "09:51 AM", title: "Awaiting engineering triage", body: "Logs attached and pending browser compatibility review." }
+          ],
+        },
+        {
+          id: 1026,
+          title: "Need invoice copy for March",
+          category: "Billing",
+          priority: "Low",
+          status: "Resolved",
+          date: "Apr 06, 2026",
+          customer: "Maple Studio",
+          owner: "Jordan Lee",
+          sentiment: "Positive",
+          autoResolve: true,
+          description: "Customer requested a downloadable invoice copy for internal finance review.",
+          aiCategory: "Billing",
+          responseTime: "3 min",
+          suggestion: "Hi, I've attached your March invoice and enabled invoice downloads directly from your billing portal for future access. Let us know if you need a custom PO reference added.",
+          timeline: [
+            { time: "04:02 PM", title: "Ticket created", body: "Invoice request received by email channel." },
+            { time: "04:04 PM", title: "Auto-response drafted", body: "AI recommended invoice attachment workflow." },
+            { time: "04:08 PM", title: "Resolved", body: "Invoice shared and ticket closed automatically after confirmation." }
+          ],
+        },
+        {
+          id: 1027,
+          title: "Add SSO support for contractor accounts",
+          category: "Feature Request",
+          priority: "Medium",
+          status: "Open",
+          date: "Apr 05, 2026",
+          customer: "Vertex Health",
+          owner: "Rina Patel",
+          sentiment: "Positive",
+          autoResolve: false,
+          description: "Enterprise customer wants SSO for external contractor accounts with limited workspace permissions.",
+          aiCategory: "Feature Request",
+          responseTime: "18 min",
+          suggestion: "Thanks for sharing this request. I've logged the need for contractor-friendly SSO and passed it to our product team with the account context you provided. We'll follow up if we need more workflow details.",
+          timeline: [
+            { time: "01:10 PM", title: "Ticket created", body: "Enterprise product feedback entered via customer success." },
+            { time: "01:16 PM", title: "AI tagged as feature request", body: "Routed to roadmap review with account ARR context." },
+            { time: "01:38 PM", title: "Pending PM review", body: "Waiting for product feedback before responding externally." }
+          ],
+        },
+      ],
+      notifications: [
+        { icon: "fa-ticket", title: "Ticket #1025 marked Critical", body: "AI escalated based on outage language and impacted users.", time: "2 min ago" },
+        { icon: "fa-comments", title: "New customer reply in Northwind Ops chat", body: "Customer added fresh console screenshots for Safari issue.", time: "7 min ago" },
+        { icon: "fa-wand-magic-sparkles", title: "Suggested reply ready", body: "A billing response draft is available for ticket #1024.", time: "11 min ago" },
+        { icon: "fa-circle-check", title: "Ticket #1026 auto-resolved", body: "Invoice request completed and customer confirmed receipt.", time: "23 min ago" },
+      ],
+      conversations: [
+        {
+          id: 1,
+          name: "Ava from Acme Labs",
+          company: "Billing support",
+          status: "Online",
+          preview: "Thanks, could you confirm if I'll be charged twice?",
+          avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=120&q=80",
+          messages: [
+            { sender: "customer", text: "Hi team, I saw two charge alerts after our annual renewal. Can you help?", time: "10:10 AM" },
+            { sender: "agent", text: "Absolutely. I'm checking the payment event now and will confirm whether the duplicate alert was only cosmetic.", time: "10:12 AM" },
+            { sender: "customer", text: "Thanks, could you confirm if I'll be charged twice?", time: "10:13 AM" },
+          ],
+        },
+        {
+          id: 2,
+          name: "Liam from Northwind Ops",
+          company: "Technical escalation",
+          status: "Typing...",
+          preview: "Sharing the Safari console log here now.",
+          avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80",
+          messages: [
+            { sender: "customer", text: "The dashboard is blank on Safari after login, but Chrome is fine.", time: "09:42 AM" },
+            { sender: "agent", text: "Thanks for reporting it. We've escalated this to engineering and would love any console logs you can share.", time: "09:48 AM" },
+          ],
+        },
+        {
+          id: 3,
+          name: "Nina from Maple Studio",
+          company: "Billing request",
+          status: "Resolved",
+          preview: "Received, thanks for sending the invoice.",
+          avatar: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=120&q=80",
+          messages: [
+            { sender: "customer", text: "Could I get a copy of our March invoice?", time: "04:02 PM" },
+            { sender: "agent", text: "Attached. I also enabled invoice downloads in your portal.", time: "04:07 PM" },
+            { sender: "customer", text: "Received, thanks for sending the invoice.", time: "04:09 PM" },
+          ],
+        },
+      ],
+      activities: [
+        { icon: "fa-wand-magic-sparkles", title: "AI auto-tagged 18 tickets", body: "Confidence above 90% across billing and technical categories.", color: "text-indigo-500" },
+        { icon: "fa-bolt", title: "First response time improved", body: "Average first touch dropped to 8.4 minutes this morning.", color: "text-amber-500" },
+        { icon: "fa-user-check", title: "Jordan resolved invoice request", body: "Ticket #1026 closed with AI-generated response and attachment.", color: "text-emerald-500" },
+        { icon: "fa-triangle-exclamation", title: "Safari issue escalated", body: "Ticket #1025 moved into engineering priority queue.", color: "text-rose-500" },
+      ],
+    };
+
+    const dom = {
+      authScreen: document.getElementById("authScreen"),
+      appShell: document.getElementById("appShell"),
+      authSubtitle: document.getElementById("authSubtitle"),
+      authSubmitBtn: document.getElementById("authSubmitBtn"),
+      loginModeBtn: document.getElementById("loginModeBtn"),
+      signupModeBtn: document.getElementById("signupModeBtn"),
+      authRoleUserBtn: document.getElementById("authRoleUserBtn"),
+      authRoleAdminBtn: document.getElementById("authRoleAdminBtn"),
+      authRoleHelp: document.getElementById("authRoleHelp"),
+      authForm: document.getElementById("authForm"),
+      sidebar: document.getElementById("sidebar"),
+      mobileSidebarBackdrop: document.getElementById("mobileSidebarBackdrop"),
+      openSidebarBtn: document.getElementById("openSidebarBtn"),
+      liveUserViewBtn: document.getElementById("liveUserViewBtn"),
+      liveAdminViewBtn: document.getElementById("liveAdminViewBtn"),
+      darkModeBtn: document.getElementById("darkModeBtn"),
+      notificationsBtn: document.getElementById("notificationsBtn"),
+      notificationsPanel: document.getElementById("notificationsPanel"),
+      notificationsList: document.getElementById("notificationsList"),
+      profileBtn: document.getElementById("profileBtn"),
+      profileMenu: document.getElementById("profileMenu"),
+      profileMenuBtn: document.getElementById("profileMenuBtn"),
+      securityMenuBtn: document.getElementById("securityMenuBtn"),
+      profileAvatar: document.getElementById("profileAvatar"),
+      profileName: document.getElementById("profileName"),
+      profileRoleLabel: document.getElementById("profileRoleLabel"),
+      logoutBtn: document.getElementById("logoutBtn"),
+      contentSkeleton: document.getElementById("contentSkeleton"),
+      statsGrid: document.getElementById("statsGrid"),
+      activityFeed: document.getElementById("activityFeed"),
+      ticketTableBody: document.getElementById("ticketTableBody"),
+      ticketCards: document.getElementById("ticketCards"),
+      ticketEmptyState: document.getElementById("ticketEmptyState"),
+      ticketSearchInput: document.getElementById("ticketSearchInput"),
+      statusFilter: document.getElementById("statusFilter"),
+      priorityFilter: document.getElementById("priorityFilter"),
+      ticketDetailsHeader: document.getElementById("ticketDetailsHeader"),
+      statusTracker: document.getElementById("statusTracker"),
+      ticketTimeline: document.getElementById("ticketTimeline"),
+      aiInsightBadges: document.getElementById("aiInsightBadges"),
+      aiSuggestedReply: document.getElementById("aiSuggestedReply"),
+      autoResolveBadge: document.getElementById("autoResolveBadge"),
+      ticketContext: document.getElementById("ticketContext"),
+      aiThinkingState: document.getElementById("aiThinkingState"),
+      useAiSuggestionBtn: document.getElementById("useAiSuggestionBtn"),
+      backToTicketsBtn: document.getElementById("backToTicketsBtn"),
+      createTicketForm: document.getElementById("createTicketForm"),
+      ticketTitleInput: document.getElementById("ticketTitleInput"),
+      voiceTitleBtn: document.getElementById("voiceTitleBtn"),
+      ticketDescriptionInput: document.getElementById("ticketDescriptionInput"),
+      voiceInputBtn: document.getElementById("voiceInputBtn"),
+      voiceInputStatus: document.getElementById("voiceInputStatus"),
+      ticketCategorySelect: document.getElementById("ticketCategorySelect"),
+      ticketPrioritySelect: document.getElementById("ticketPrioritySelect"),
+      ticketFileUpload: document.getElementById("ticketFileUpload"),
+      uploadedFileName: document.getElementById("uploadedFileName"),
+      createAiSignals: document.getElementById("createAiSignals"),
+      createAiSummary: document.getElementById("createAiSummary"),
+      autofillSampleBtn: document.getElementById("autofillSampleBtn"),
+      conversationList: document.getElementById("conversationList"),
+      chatHeader: document.getElementById("chatHeader"),
+      chatMessages: document.getElementById("chatMessages"),
+      chatTypingIndicator: document.getElementById("chatTypingIndicator"),
+      chatForm: document.getElementById("chatForm"),
+      chatInput: document.getElementById("chatInput"),
+      chatSuggestionBtn: document.getElementById("chatSuggestionBtn"),
+      conversationSearchInput: document.getElementById("conversationSearchInput"),
+      chatbotToggle: document.getElementById("chatbotToggle"),
+      chatbotWindow: document.getElementById("chatbotWindow"),
+      closeChatbotBtn: document.getElementById("closeChatbotBtn"),
+      chatbotMessages: document.getElementById("chatbotMessages"),
+      chatbotForm: document.getElementById("chatbotForm"),
+      chatbotInput: document.getElementById("chatbotInput"),
+      chatbotSendBtn: document.getElementById("chatbotSendBtn"),
+      chatbotCreateTicketBtn: document.getElementById("chatbotCreateTicketBtn"),
+      toastContainer: document.getElementById("toastContainer"),
+      openCreateFromDashboard: document.getElementById("openCreateFromDashboard"),
+      howItWorksBtn: document.getElementById("howItWorksBtn"),
+      exportReportBtn: document.getElementById("exportReportBtn"),
+      createTicketShortcut: document.getElementById("createTicketShortcut"),
+      globalSearch: document.getElementById("globalSearch"),
+      guideModal: document.getElementById("guideModal"),
+      guideIntro: document.getElementById("guideIntro"),
+      guideProgress: document.getElementById("guideProgress"),
+      guideStepLabel: document.getElementById("guideStepLabel"),
+      guideStepTitle: document.getElementById("guideStepTitle"),
+      guideStepBadge: document.getElementById("guideStepBadge"),
+      guideStepBody: document.getElementById("guideStepBody"),
+      guideStepTips: document.getElementById("guideStepTips"),
+      guideActionTitle: document.getElementById("guideActionTitle"),
+      guideActionBody: document.getElementById("guideActionBody"),
+      guideActionBtn: document.getElementById("guideActionBtn"),
+      guideSecondaryBtn: document.getElementById("guideSecondaryBtn"),
+      guideRewardCard: document.getElementById("guideRewardCard"),
+      guidePrevBtn: document.getElementById("guidePrevBtn"),
+      guideNextBtn: document.getElementById("guideNextBtn"),
+      profileModal: document.getElementById("profileModal"),
+      profileModalContent: document.getElementById("profileModalContent"),
+      securityModal: document.getElementById("securityModal"),
+      securityModalContent: document.getElementById("securityModalContent"),
+    };
+
+    function escapeHtml(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function priorityClasses(priority) {
+      return {
+        Low: "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-300",
+        Medium: "bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-300",
+        High: "bg-orange-50 text-orange-600 dark:bg-orange-500/10 dark:text-orange-300",
+        Critical: "bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-300",
+      }[priority] || "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300";
+    }
+
+    function statusClasses(status) {
+      return {
+        Open: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200",
+        "In Progress": "bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-200",
+        Resolved: "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-300",
+      }[status] || "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200";
+    }
+
+    function showToast(message, tone = "default") {
+      const toneClasses = {
+        default: "border-slate-200 bg-white text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-white",
+        success: "border-emerald-200 bg-emerald-50 text-emerald-900 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-100",
+        info: "border-indigo-200 bg-indigo-50 text-indigo-900 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-100",
+      };
+      const toast = document.createElement("div");
+      toast.className = `pointer-events-auto slide-up rounded-3xl border px-4 py-3 shadow-soft ${toneClasses[tone] || toneClasses.default}`;
+      toast.innerHTML = `<p class="text-sm font-semibold">${escapeHtml(message)}</p>`;
+      dom.toastContainer.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateY(-6px)";
+        setTimeout(() => toast.remove(), 250);
+      }, 2800);
+    }
+
+    function getCurrentProfile() {
+      return state.profiles[state.authRole];
+    }
+
+    function openModal(modal) {
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    function closeModal(modal) {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+
+    function renderRoleExperience() {
+      const profile = getCurrentProfile();
+      const analyticsNav = document.querySelector('[data-section="analytics"]');
+      const settingsNav = document.querySelector('[data-section="settings"]');
+      dom.profileName.textContent = profile.name;
+      dom.profileRoleLabel.textContent = profile.roleLabel;
+      dom.profileAvatar.src = profile.avatar;
+      dom.profileAvatar.alt = `${profile.name} avatar`;
+      dom.liveUserViewBtn.className = `rounded-xl px-4 py-2 text-xs font-semibold transition ${state.authRole === "user" ? "bg-cyan-50 text-cyan-700 dark:bg-cyan-500/10 dark:text-cyan-200" : "text-slate-500 dark:text-slate-400"}`;
+      dom.liveAdminViewBtn.className = `rounded-xl px-4 py-2 text-xs font-semibold transition ${state.authRole === "admin" ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-200" : "text-slate-500 dark:text-slate-400"}`;
+      if (analyticsNav) analyticsNav.classList.toggle("hidden", state.authRole === "user");
+      if (settingsNav) settingsNav.classList.toggle("hidden", state.authRole === "user");
+    }
+
+    function ensureUserConversation() {
+      const profile = state.profiles.user;
+      let conversation = state.conversations.find((item) => item.customerName === profile.name || item.name === profile.name);
+      if (!conversation) {
+        conversation = {
+          id: Math.max(0, ...state.conversations.map((item) => item.id)) + 1,
+          ticketId: null,
+          name: profile.name,
+          customerName: profile.name,
+          company: "Direct support thread",
+          status: "Waiting for admin",
+          preview: "Start a conversation with support",
+          avatar: profile.avatar,
+          messages: [
+            { sender: "agent", text: "Hello, this is the shared support thread. Send your question here and the admin view will see it.", time: "Now" }
+          ],
+        };
+        state.conversations.unshift(conversation);
+      }
+      return conversation;
+    }
+
+    function getVisibleConversations() {
+      if (state.authRole === "admin") return state.conversations;
+      const profile = state.profiles.user;
+      return state.conversations.filter((conversation) => (conversation.customerName || conversation.name) === profile.name);
+    }
+
+    function getConversationDisplay(conversation) {
+      const customerName = conversation.customerName || conversation.name;
+      if (state.authRole === "user" && customerName === state.profiles.user.name) {
+        return {
+          name: "Support Team",
+          company: conversation.company,
+          avatar: state.profiles.admin.avatar,
+        };
+      }
+      return {
+        name: customerName,
+        company: conversation.company,
+        avatar: conversation.avatar,
+      };
+    }
+
+    function switchLiveRole(role) {
+      state.authRole = role;
+      renderRoleExperience();
+      updateAuthRole(role);
+      if (role === "user") {
+        const userConversation = ensureUserConversation();
+        state.activeConversationId = userConversation.id;
+      } else if (!getVisibleConversations().some((conversation) => conversation.id === state.activeConversationId)) {
+        state.activeConversationId = getVisibleConversations()[0]?.id || ensureUserConversation().id;
+      }
+      renderNotifications();
+      renderProfileModal();
+      renderSecurityModal();
+      if (state.currentSection === "chat") {
+        renderConversations();
+        renderChat();
+      }
+      if (state.currentSection === "tickets" || state.currentSection === "ticketDetails") {
+        renderTickets();
+        renderTicketDetails();
+      }
+      showToast(`Switched to ${role} view`, "info");
+    }
+
+    function updateAuthRole(role) {
+      state.authRole = role;
+      state.guideStep = 0;
+      const isUser = role === "user";
+      const activeClass = "border-indigo-300 bg-indigo-50 shadow-sm dark:border-indigo-500 dark:bg-indigo-500/10";
+      const inactiveClass = "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-950";
+      dom.authRoleUserBtn.className = `rounded-[1.5rem] border p-4 text-left transition hover:border-indigo-300 ${isUser ? activeClass : inactiveClass}`;
+      dom.authRoleAdminBtn.className = `rounded-[1.5rem] border p-4 text-left transition hover:border-indigo-300 ${!isUser ? activeClass : inactiveClass}`;
+      dom.authRoleHelp.textContent = isUser
+        ? "User creates queries and follows ticket updates"
+        : "Admin reviews AI triage and resolves escalations";
+      dom.authSubtitle.textContent = state.authMode === "login"
+        ? (isUser
+          ? "Sign in to raise support tickets, chat with the team, and track updates."
+          : "Sign in to manage tickets, AI suggestions, and live support conversations.")
+        : (isUser
+          ? "Create a user account to submit support requests and follow AI-assisted updates."
+          : "Create an admin workspace to review escalations and keep support operations running.");
+      dom.authSubmitBtn.textContent = state.authMode === "login"
+        ? (isUser ? "Login as User" : "Login as Admin")
+        : (isUser ? "Create User Account" : "Create Admin Account");
+      document.getElementById("authEmail").value = getCurrentProfile().email;
+      renderRoleExperience();
+      renderGuideModal();
+    }
+
+    function updateAuthMode(mode) {
+      state.authMode = mode;
+      const isLogin = mode === "login";
+      dom.loginModeBtn.className = `rounded-xl px-5 py-2 text-sm font-semibold transition ${isLogin ? "bg-white text-slate-900 shadow-sm dark:bg-slate-800 dark:text-white" : "text-slate-500 dark:text-slate-400"}`;
+      dom.signupModeBtn.className = `rounded-xl px-5 py-2 text-sm font-semibold transition ${!isLogin ? "bg-white text-slate-900 shadow-sm dark:bg-slate-800 dark:text-white" : "text-slate-500 dark:text-slate-400"}`;
+      updateAuthRole(state.authRole);
+    }
+
+    function updateDarkMode() {
+      document.documentElement.classList.toggle("dark", state.darkMode);
+      dom.darkModeBtn.innerHTML = state.darkMode ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+      renderCharts();
+    }
+
+    function getFilteredTickets() {
+      return state.tickets.filter((ticket) => {
+        const matchesSearch = `${ticket.title} ${ticket.category}`.toLowerCase().includes(state.ticketSearch.toLowerCase());
+        const matchesStatus = state.ticketStatus === "all" || ticket.status === state.ticketStatus;
+        const matchesPriority = state.ticketPriority === "all" || ticket.priority === state.ticketPriority;
+        return matchesSearch && matchesStatus && matchesPriority;
+      });
+    }
+
+    function renderStats() {
+      const total = state.tickets.length;
+      const open = state.tickets.filter((ticket) => ticket.status === "Open" || ticket.status === "In Progress").length;
+      const resolved = state.tickets.filter((ticket) => ticket.status === "Resolved").length;
+      const avgMinutes = Math.round(state.tickets.reduce((sum, ticket) => sum + parseInt(ticket.responseTime, 10), 0) / state.tickets.length);
+      const stats = [
+        { label: "Total Tickets", value: total, trend: "+9% vs yesterday", icon: "fa-ticket", shell: "bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-200" },
+        { label: "Open Tickets", value: open, trend: "5 need priority review", icon: "fa-folder-open", shell: "bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-300" },
+        { label: "Resolved Tickets", value: resolved, trend: "41 auto-resolved", icon: "fa-circle-check", shell: "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-300" },
+        { label: "Avg Response Time", value: `${avgMinutes} min`, trend: "-12% this week", icon: "fa-stopwatch", shell: "bg-cyan-50 text-cyan-600 dark:bg-cyan-500/10 dark:text-cyan-200" },
+      ];
+      dom.statsGrid.innerHTML = stats.map((stat) => `
+        <div class="slide-up rounded-[2rem] border border-white/70 bg-white/80 p-5 shadow-soft backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/75">
+          <div class="flex items-start justify-between">
+            <div>
+              <p class="text-sm text-slate-500 dark:text-slate-400">${escapeHtml(stat.label)}</p>
+              <p class="mt-3 text-3xl font-bold">${escapeHtml(String(stat.value))}</p>
+              <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">${escapeHtml(stat.trend)}</p>
+            </div>
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl ${stat.shell}">
+              <i class="fa-solid ${stat.icon}"></i>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderActivityFeed() {
+      dom.activityFeed.innerHTML = state.activities.map((activity) => `
+        <div class="flex gap-4 rounded-3xl bg-slate-50 p-4 dark:bg-slate-950">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white dark:bg-slate-900">
+            <i class="fa-solid ${activity.icon} ${activity.color}"></i>
+          </div>
+          <div>
+            <p class="font-semibold">${escapeHtml(activity.title)}</p>
+            <p class="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400">${escapeHtml(activity.body)}</p>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderNotifications() {
+      dom.notificationsList.innerHTML = state.notifications.map((notification) => `
+        <div class="rounded-3xl bg-slate-50 p-4 dark:bg-slate-950">
+          <div class="flex gap-3">
+            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white text-indigo-600 dark:bg-slate-900 dark:text-indigo-200">
+              <i class="fa-solid ${notification.icon}"></i>
+            </div>
+            <div>
+              <p class="font-semibold">${escapeHtml(notification.title)}</p>
+              <p class="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400">${escapeHtml(notification.body)}</p>
+              <p class="mt-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">${escapeHtml(notification.time)}</p>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function addAdminVisibilityForTicket(ticket, source = "ticket") {
+      const existingConversation = state.conversations.find((conversation) => conversation.ticketId === ticket.id);
+      if (!existingConversation) {
+        state.conversations.unshift({
+          id: Math.max(0, ...state.conversations.map((conversation) => conversation.id)) + 1,
+          ticketId: ticket.id,
+          name: ticket.customer,
+          customerName: ticket.customer,
+          company: `${ticket.category} support`,
+          status: "Waiting for admin",
+          preview: ticket.description,
+          avatar: state.authRole === "user" ? getCurrentProfile().avatar : state.profiles.user.avatar,
+          messages: [
+            { sender: "customer", text: ticket.description, time: "Now" },
+          ],
+        });
+      } else {
+        existingConversation.preview = ticket.description;
+        existingConversation.status = "Waiting for admin";
+      }
+      state.notifications.unshift({
+        icon: "fa-user-clock",
+        title: `New user query #${ticket.id} waiting for admin`,
+        body: `${ticket.customer} submitted a ${ticket.priority.toLowerCase()} priority ${ticket.category.toLowerCase()} request via ${source}.`,
+        time: "Just now",
+      });
+      state.activities.unshift({
+        icon: "fa-inbox",
+        title: `New user query from ${ticket.customer}`,
+        body: `${ticket.title} is now visible in the admin review queue.`,
+        color: "text-cyan-500",
+      });
+      renderNotifications();
+      renderActivityFeed();
+      renderConversations();
+      if (state.currentSection === "chat") renderChat();
+    }
+
+    function renderChatbotMessages() {
+      dom.chatbotMessages.innerHTML = state.chatbotHistory.map((message) => `
+        <div class="flex ${message.sender === "user" ? "justify-end" : "justify-start"}">
+          <div class="max-w-[85%] rounded-[1.4rem] px-4 py-3 ${message.sender === "user" ? "bg-slate-950 text-white dark:bg-indigo-600" : "bg-slate-50 text-slate-700 dark:bg-slate-950 dark:text-slate-300"}">
+            <p class="leading-6">${escapeHtml(message.text)}</p>
+          </div>
+        </div>
+      `).join("");
+      dom.chatbotMessages.scrollTop = dom.chatbotMessages.scrollHeight;
+    }
+
+    function getCopilotResponse(query) {
+      const lower = query.toLowerCase();
+      if (lower.includes("billing") || lower.includes("refund") || lower.includes("charged") || lower.includes("invoice")) {
+        return {
+          answer: "Copilot sees this as a billing-related issue. I recommend creating a billing ticket so the admin queue can verify charges, invoices, or refunds. If you want, I can treat this as a bill-related support request right away.",
+          title: "Billing support request",
+          createTicket: true,
+          category: "Billing",
+          priority: lower.includes("urgent") ? "High" : "Medium",
+        };
+      }
+      if (lower.includes("password") || lower.includes("login") || lower.includes("account") || lower.includes("access")) {
+        return {
+          answer: "Copilot classifies this as an account access issue. The quickest path is to create an account ticket so an admin can verify identity and resolve access safely.",
+          title: "Account access issue",
+          createTicket: true,
+          category: "Account",
+          priority: "Medium",
+        };
+      }
+      if (lower.includes("error") || lower.includes("bug") || lower.includes("down") || lower.includes("outage") || lower.includes("crash")) {
+        return {
+          answer: "This sounds like a technical issue. I would mark it for admin review with elevated priority so it appears in the shared support queue immediately.",
+          title: "Technical issue reported",
+          createTicket: true,
+          category: "Technical",
+          priority: lower.includes("down") || lower.includes("outage") ? "Critical" : "High",
+        };
+      }
+      if (lower.includes("feature") || lower.includes("request") || lower.includes("add")) {
+        return {
+          answer: "Copilot reads this as a feature request. I can log it for the admin team so it becomes visible in the review queue and can be tracked like a product request.",
+          title: "Feature request submission",
+          createTicket: true,
+          category: "Feature Request",
+          priority: "Low",
+        };
+      }
+      return {
+        answer: "Copilot understands your query and recommends creating a general support ticket so the admin queue can see it and respond with the right context. You can also keep chatting here for clarification.",
+        title: "General support query",
+        createTicket: state.authRole === "user",
+        category: "General",
+        priority: "Medium",
+      };
+    }
+
+    function createTicketFromCopilotQuery(query, options = {}) {
+      const profile = getCurrentProfile();
+      const title = options.title || query.split(/[.!?]/)[0].trim() || "Support query";
+      const newTicket = {
+        id: Math.max(...state.tickets.map((ticket) => ticket.id)) + 1,
+        title,
+        category: options.category || "General",
+        priority: options.priority || "Medium",
+        status: "Open",
+        date: "Apr 07, 2026",
+        customer: profile.name,
+        owner: "Admin Review Queue",
+        sentiment: query.toLowerCase().includes("urgent") || query.toLowerCase().includes("not working") ? "Negative" : "Neutral",
+        autoResolve: false,
+        description: query,
+        aiCategory: options.category || "General",
+        responseTime: "0 min",
+        suggestion: "Thanks for the context. Copilot has shared this with the admin queue so a human can review and respond if automation is not enough.",
+        timeline: [
+          { time: "Now", title: "Query received in Copilot", body: "User submitted a support request through the chatbot." },
+          { time: "Now", title: "Shared with admin queue", body: "The issue is now visible to admins in tickets, notifications, and chat." },
+          { time: "Now", title: "Awaiting review", body: "An admin can now triage, reply, or escalate further." },
+        ],
+      };
+      state.tickets.unshift(newTicket);
+      addAdminVisibilityForTicket(newTicket, "copilot");
+      renderStats();
+      renderTickets();
+      return newTicket;
+    }
+
+    function sendChatbotQuery(event) {
+      event.preventDefault();
+      const query = dom.chatbotInput.value.trim();
+      if (!query) return;
+      state.chatbotHistory.push({ sender: "user", text: query });
+      const reply = getCopilotResponse(query);
+      let ticket;
+      if (state.authRole === "user" && reply.createTicket) {
+        ticket = createTicketFromCopilotQuery(query, reply);
+      }
+      const answer = ticket
+        ? `${reply.answer} I have also created ticket #${ticket.id}, and it is now visible to the admin team.`
+        : reply.answer;
+      state.chatbotHistory.push({ sender: "bot", text: answer });
+      dom.chatbotInput.value = "";
+      renderChatbotMessages();
+      if (ticket) showToast(`Copilot created ticket #${ticket.id} for admin review`, "success");
+    }
+
+    function renderTickets() {
+      const tickets = getFilteredTickets();
+      const desktopWrapper = dom.ticketTableBody.parentElement.parentElement;
+      dom.ticketEmptyState.classList.toggle("hidden", tickets.length > 0);
+      desktopWrapper.classList.toggle("hidden", tickets.length === 0 && window.innerWidth >= 1024);
+      dom.ticketCards.classList.toggle("hidden", tickets.length === 0);
+
+      dom.ticketTableBody.innerHTML = tickets.map((ticket) => `
+        <tr class="transition hover:bg-slate-50/80 dark:hover:bg-slate-950/80">
+          <td class="px-4 py-5">
+            <div>
+              <p class="font-semibold">${escapeHtml(ticket.title)}</p>
+              <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">#${ticket.id} - ${escapeHtml(ticket.customer)}</p>
+            </div>
+          </td>
+          <td class="px-4 py-5 text-sm text-slate-600 dark:text-slate-300">${escapeHtml(ticket.category)}</td>
+          <td class="px-4 py-5"><span class="rounded-full px-3 py-2 text-xs font-semibold ${priorityClasses(ticket.priority)}">${escapeHtml(ticket.priority)}</span></td>
+          <td class="px-4 py-5"><span class="rounded-full px-3 py-2 text-xs font-semibold ${statusClasses(ticket.status)}">${escapeHtml(ticket.status)}</span></td>
+          <td class="px-4 py-5 text-sm text-slate-500 dark:text-slate-400">${escapeHtml(ticket.date)}</td>
+          <td class="px-4 py-5 text-right">
+            <button data-ticket-id="${ticket.id}" class="view-ticket-btn rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold transition hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-800 dark:bg-slate-950">
+              View Details
+            </button>
+          </td>
+        </tr>
+      `).join("");
+
+      dom.ticketCards.innerHTML = tickets.map((ticket) => `
+        <div class="rounded-[1.75rem] border border-slate-100 bg-white p-5 dark:border-slate-800 dark:bg-slate-950">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <p class="font-semibold">${escapeHtml(ticket.title)}</p>
+              <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">${escapeHtml(ticket.category)} - ${escapeHtml(ticket.date)}</p>
+            </div>
+            <span class="rounded-full px-3 py-2 text-xs font-semibold ${priorityClasses(ticket.priority)}">${escapeHtml(ticket.priority)}</span>
+          </div>
+          <div class="mt-4 flex items-center justify-between">
+            <span class="rounded-full px-3 py-2 text-xs font-semibold ${statusClasses(ticket.status)}">${escapeHtml(ticket.status)}</span>
+            <button data-ticket-id="${ticket.id}" class="view-ticket-btn text-sm font-semibold text-indigo-600 dark:text-indigo-300">View Details</button>
+          </div>
+        </div>
+      `).join("");
+
+      document.querySelectorAll(".view-ticket-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.selectedTicketId = Number(button.dataset.ticketId);
+          renderTicketDetails();
+          switchSection("ticketDetails");
+        });
+      });
+    }
+
+    function renderTicketDetails() {
+      const ticket = state.tickets.find((item) => item.id === state.selectedTicketId);
+      if (!ticket) return;
+      dom.ticketDetailsHeader.innerHTML = `
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p class="text-sm font-semibold uppercase tracking-[0.22em] text-indigo-600 dark:text-indigo-300">Ticket #${ticket.id}</p>
+            <h2 class="mt-2 font-display text-3xl font-bold">${escapeHtml(ticket.title)}</h2>
+            <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-500 dark:text-slate-400">${escapeHtml(ticket.description)}</p>
+          </div>
+          <div class="flex flex-wrap gap-3">
+            <span class="rounded-full px-4 py-2 text-xs font-semibold ${priorityClasses(ticket.priority)}">${escapeHtml(ticket.priority)} Priority</span>
+            <span class="rounded-full px-4 py-2 text-xs font-semibold ${statusClasses(ticket.status)}">${escapeHtml(ticket.status)}</span>
+          </div>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div class="rounded-3xl bg-slate-50 p-4 dark:bg-slate-950"><p class="text-sm text-slate-500 dark:text-slate-400">Customer</p><p class="mt-2 font-semibold">${escapeHtml(ticket.customer)}</p></div>
+          <div class="rounded-3xl bg-slate-50 p-4 dark:bg-slate-950"><p class="text-sm text-slate-500 dark:text-slate-400">Owner</p><p class="mt-2 font-semibold">${escapeHtml(ticket.owner)}</p></div>
+          <div class="rounded-3xl bg-slate-50 p-4 dark:bg-slate-950"><p class="text-sm text-slate-500 dark:text-slate-400">Response Time</p><p class="mt-2 font-semibold">${escapeHtml(ticket.responseTime)}</p></div>
+          <div class="rounded-3xl bg-slate-50 p-4 dark:bg-slate-950"><p class="text-sm text-slate-500 dark:text-slate-400">Date Opened</p><p class="mt-2 font-semibold">${escapeHtml(ticket.date)}</p></div>
+        </div>
+      `;
+      dom.statusTracker.innerHTML = "";
+      const progressStep = ticket.status === "Resolved" ? 3 : ticket.status === "In Progress" ? 2 : 1;
+      ["Open", "In Progress", "Resolved"].forEach((label, index) => {
+        const active = index + 1 <= progressStep;
+        dom.statusTracker.insertAdjacentHTML("beforeend", `
+          <div class="rounded-3xl border ${active ? "border-indigo-200 bg-indigo-50/70 dark:border-indigo-500/30 dark:bg-indigo-500/10" : "border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950"} p-4">
+            <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-2xl ${active ? "bg-indigo-600 text-white" : "bg-white text-slate-400 dark:bg-slate-900"}">${index + 1}</div>
+            <p class="font-semibold">${label}</p>
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">${active ? "Completed or active" : "Pending next step"}</p>
+          </div>
+        `);
+      });
+      dom.ticketTimeline.innerHTML = ticket.timeline.map((item) => `
+        <div class="relative flex gap-4">
+          <div class="flex w-20 shrink-0 flex-col items-center">
+            <span class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">${escapeHtml(item.time)}</span>
+            <span class="mt-3 h-full w-px bg-slate-200 dark:bg-slate-800"></span>
+          </div>
+          <div class="flex-1 rounded-3xl bg-slate-50 p-4 dark:bg-slate-950">
+            <p class="font-semibold">${escapeHtml(item.title)}</p>
+            <p class="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">${escapeHtml(item.body)}</p>
+          </div>
+        </div>
+      `).join("");
+      dom.aiInsightBadges.innerHTML = `
+        <span class="rounded-full bg-white/15 px-4 py-2 text-sm font-semibold">AI Detected Category: ${escapeHtml(ticket.aiCategory)}</span>
+        <span class="rounded-full bg-white/15 px-4 py-2 text-sm font-semibold">Priority Level: ${escapeHtml(ticket.priority)}</span>
+        <span class="rounded-full bg-white/15 px-4 py-2 text-sm font-semibold">Sentiment: ${escapeHtml(ticket.sentiment)}</span>
+      `;
+      dom.aiSuggestedReply.textContent = ticket.suggestion;
+      dom.autoResolveBadge.textContent = ticket.autoResolve ? "Auto-resolve available" : "Manual review recommended";
+      dom.autoResolveBadge.className = `rounded-full px-3 py-1 text-xs font-semibold ${ticket.autoResolve ? "bg-emerald-400/15 text-emerald-200" : "bg-amber-300/15 text-amber-100"}`;
+      dom.ticketContext.innerHTML = `
+        <div class="rounded-3xl bg-slate-50 p-4 dark:bg-slate-950"><p class="text-sm text-slate-500 dark:text-slate-400">Detected category</p><p class="mt-2 font-semibold">${escapeHtml(ticket.aiCategory)}</p></div>
+        <div class="rounded-3xl bg-slate-50 p-4 dark:bg-slate-950"><p class="text-sm text-slate-500 dark:text-slate-400">Customer sentiment</p><p class="mt-2 font-semibold">${escapeHtml(ticket.sentiment)}</p></div>
+        <div class="rounded-3xl bg-slate-50 p-4 dark:bg-slate-950"><p class="text-sm text-slate-500 dark:text-slate-400">Automation note</p><p class="mt-2 font-semibold">${ticket.autoResolve ? "Eligible for automated closure after confirmation" : "Needs agent review before sending resolution"}</p></div>
+      `;
+    }
+
+    function renderConversations() {
+      const filtered = getVisibleConversations().filter((conversation) =>
+        `${conversation.customerName || conversation.name} ${conversation.company}`.toLowerCase().includes(state.conversationSearch.toLowerCase())
+      );
+      if (!filtered.some((conversation) => conversation.id === state.activeConversationId) && filtered.length) {
+        state.activeConversationId = filtered[0].id;
+      }
+      dom.conversationList.innerHTML = filtered.map((conversation) => {
+        const active = conversation.id === state.activeConversationId;
+        const display = getConversationDisplay(conversation);
+        return `
+          <button data-conversation-id="${conversation.id}" class="conversation-item flex w-full items-center gap-4 rounded-[1.5rem] px-4 py-4 text-left transition ${active ? "bg-indigo-50 dark:bg-indigo-500/10" : "hover:bg-slate-50 dark:hover:bg-slate-950"}">
+            <img src="${display.avatar}" alt="${escapeHtml(display.name)}" class="h-12 w-12 rounded-2xl object-cover" />
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center justify-between gap-3">
+                <p class="truncate font-semibold">${escapeHtml(display.name)}</p>
+                <span class="text-xs text-slate-400">${escapeHtml(conversation.status)}</span>
+              </div>
+              <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">${escapeHtml(display.company)}</p>
+              <p class="mt-1 truncate text-sm text-slate-500 dark:text-slate-400">${escapeHtml(conversation.preview)}</p>
+            </div>
+          </button>
+        `;
+      }).join("");
+      document.querySelectorAll(".conversation-item").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.activeConversationId = Number(button.dataset.conversationId);
+          renderConversations();
+          renderChat();
+        });
+      });
+    }
+
+    function renderChat() {
+      const conversation = state.conversations.find((item) => item.id === state.activeConversationId);
+      if (!conversation) return;
+      const display = getConversationDisplay(conversation);
+      dom.chatHeader.innerHTML = `
+        <div class="flex items-center gap-4">
+          <img src="${display.avatar}" alt="${escapeHtml(display.name)}" class="h-12 w-12 rounded-2xl object-cover" />
+          <div>
+            <p class="font-display text-xl font-bold">${escapeHtml(display.name)}</p>
+            <p class="text-sm text-slate-500 dark:text-slate-400">${escapeHtml(display.company)} - ${escapeHtml(conversation.status)}</p>
+          </div>
+        </div>
+        <button class="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold transition hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-800 dark:bg-slate-950">
+          ${state.authRole === "admin" ? "View Customer" : "View Support"}
+        </button>
+      `;
+      dom.chatMessages.innerHTML = conversation.messages.map((message) => `
+        <div class="flex ${((state.authRole === "user" && message.sender === "customer") || (state.authRole === "admin" && message.sender === "agent")) ? "justify-end" : "justify-start"}">
+          <div class="max-w-[80%] rounded-[1.5rem] px-4 py-3 ${((state.authRole === "user" && message.sender === "customer") || (state.authRole === "admin" && message.sender === "agent")) ? "bg-slate-950 text-white dark:bg-indigo-600" : "bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100"}">
+            <p class="mb-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${((state.authRole === "user" && message.sender === "customer") || (state.authRole === "admin" && message.sender === "agent")) ? "text-white/65" : "text-slate-400"}">
+              ${((state.authRole === "user" && message.sender === "customer") || (state.authRole === "admin" && message.sender === "agent"))
+                ? "You"
+                : (message.sender === "agent" ? "Admin" : (conversation.customerName || conversation.name))}
+            </p>
+            <p class="text-sm leading-7">${escapeHtml(message.text)}</p>
+            <p class="mt-2 text-xs ${((state.authRole === "user" && message.sender === "customer") || (state.authRole === "admin" && message.sender === "agent")) ? "text-white/65" : "text-slate-400"}">${escapeHtml(message.time)}</p>
+          </div>
+        </div>
+      `).join("");
+      dom.chatMessages.scrollTop = dom.chatMessages.scrollHeight;
+      dom.chatInput.placeholder = state.authRole === "admin" ? "Reply as admin..." : "Send a message to support...";
+    }
+
+    function analyzeTicketDraft() {
+      const title = dom.ticketTitleInput.value.trim();
+      const description = dom.ticketDescriptionInput.value.trim();
+      const combined = `${title} ${description}`.toLowerCase();
+      let category = dom.ticketCategorySelect.value;
+      let priority = dom.ticketPrioritySelect.value;
+      let sentiment = "Neutral";
+      let autoResolve = false;
+
+      if (combined.includes("invoice") || combined.includes("refund") || combined.includes("charge") || combined.includes("billing")) category = "Billing";
+      else if (combined.includes("bug") || combined.includes("error") || combined.includes("login") || combined.includes("dashboard") || combined.includes("crash")) category = "Technical";
+      else if (combined.includes("feature") || combined.includes("request") || combined.includes("add")) category = "Feature Request";
+      else if (combined.includes("account") || combined.includes("password")) category = "Account";
+      else if (!title && !description) category = "General";
+
+      if (combined.includes("urgent") || combined.includes("down") || combined.includes("outage") || combined.includes("crash") || combined.includes("charged twice")) priority = "Critical";
+      else if (combined.includes("failed") || combined.includes("error") || combined.includes("cannot") || combined.includes("blocked")) priority = "High";
+      else if (combined.includes("invoice") || combined.includes("copy")) { priority = "Low"; autoResolve = true; }
+
+      if (combined.includes("frustrated") || combined.includes("angry") || combined.includes("failed") || combined.includes("charged twice") || combined.includes("outage")) sentiment = "Negative";
+      else if (combined.includes("thanks") || combined.includes("please")) sentiment = "Positive";
+
+      dom.createAiSignals.innerHTML = `
+        <div class="rounded-3xl bg-white/10 p-4"><p class="text-xs uppercase tracking-[0.18em] text-white/70">AI Detected Category</p><p class="mt-2 text-lg font-bold">${escapeHtml(category)}</p></div>
+        <div class="rounded-3xl bg-white/10 p-4"><p class="text-xs uppercase tracking-[0.18em] text-white/70">Priority Level</p><p class="mt-2 text-lg font-bold">${escapeHtml(priority)}</p></div>
+        <div class="rounded-3xl bg-white/10 p-4"><p class="text-xs uppercase tracking-[0.18em] text-white/70">Sentiment</p><p class="mt-2 text-lg font-bold">${escapeHtml(sentiment)}</p></div>
+        <div class="rounded-3xl bg-white/10 p-4"><p class="text-xs uppercase tracking-[0.18em] text-white/70">Auto-resolve</p><p class="mt-2 text-lg font-bold">${autoResolve ? "Possible" : "Needs agent review"}</p></div>
+      `;
+      dom.createAiSummary.textContent = title || description
+        ? `AI predicts a ${category.toLowerCase()} ticket with ${priority.toLowerCase()} urgency and ${sentiment.toLowerCase()} sentiment. ${autoResolve ? "This may qualify for an automated resolution flow." : "Recommended next step: route to an agent for review and draft a tailored response."}`
+        : "Start typing to see AI-detected category, urgency, sentiment, and automation opportunities.";
+    }
+
+    function getGuideStorageKey() {
+      return `ai-support-hub-guide-seen-${state.authRole}`;
+    }
+
+    function getGuideStepsData() {
+      return state.authRole === "user"
+        ? [
+            {
+              title: "Start with your question",
+              badge: "For first-time users",
+              body: "Describe the issue in plain language. You can type it, dictate it with voice input, or launch it from the chatbot.",
+              tips: ["Use the Create Ticket page for detailed issues.", "Use the chatbot for quick FAQ-style support.", "You do not need technical wording. The AI classifies it for you."],
+              actionTitle: "Open the ticket form",
+              actionBody: "Go straight to the Create Ticket page and try the guided intake flow.",
+              actionLabel: "Open Ticket Form",
+              action: () => switchSection("create-ticket"),
+              secondaryLabel: "Ask via chatbot",
+              secondaryAction: () => {
+                closeModal(dom.guideModal);
+                dom.chatbotWindow.classList.remove("hidden");
+              },
+            },
+            {
+              title: "Use text or voice intake",
+              badge: "Hands-free option",
+              body: "Voice input makes it easy to raise a query quickly. The description field updates while you speak and AI reacts instantly.",
+              tips: ["Tap the microphone beside Description.", "If the browser blocks voice, you can still type normally.", "The AI panel updates category, urgency, and sentiment as you write."],
+              actionTitle: "Try voice-assisted intake",
+              actionBody: "Jump to Create Ticket and test the mic button for a realistic first-use flow.",
+              actionLabel: "Try Voice Input",
+              action: () => switchSection("create-ticket"),
+              secondaryLabel: "Next step",
+              secondaryAction: () => setGuideStep(Math.min(state.guideStep + 1, getGuideStepsData().length - 1)),
+            },
+            {
+              title: "Let AI organize the request",
+              badge: "AI triage",
+              body: "After submission, AI suggests category, priority, sentiment, and resolution options so your query gets handled faster.",
+              tips: ["Urgent language boosts priority automatically.", "Simple invoice or account tasks can be auto-resolved.", "Complex issues are routed to an admin for review."],
+              actionTitle: "Preview AI triage",
+              actionBody: "Open ticket details to see status tracking, AI suggestions, and the support timeline.",
+              actionLabel: "View Ticket Details",
+              action: () => {
+                state.selectedTicketId = state.tickets[0].id;
+                renderTicketDetails();
+                switchSection("ticketDetails");
+              },
+              secondaryLabel: "Next step",
+              secondaryAction: () => setGuideStep(Math.min(state.guideStep + 1, getGuideStepsData().length - 1)),
+            },
+            {
+              title: "Come back anytime",
+              badge: "Retention loop",
+              body: "When a new query comes up, users return because the app remembers the workflow: submit, track, chat, and resolve in one place.",
+              tips: ["Use Notifications to catch updates instantly.", "Chat keeps follow-ups in context.", "The guide only auto-shows once per role, but you can reopen it anytime."],
+              actionTitle: "Finish onboarding",
+              actionBody: "We will remember this tour for future visits and keep the Help button available whenever you need it.",
+              actionLabel: "Finish Tour",
+              action: () => {
+                markGuideSeen();
+                closeModal(dom.guideModal);
+                showToast("Onboarding saved. Reopen it anytime from How It Works.", "success");
+              },
+              secondaryLabel: "Open chat",
+              secondaryAction: () => switchSection("chat"),
+            },
+          ]
+        : [
+            {
+              title: "Enter the admin workspace",
+              badge: "Ops overview",
+              body: "Admins land on the dashboard where AI activity, unresolved tickets, and response trends are surfaced immediately.",
+              tips: ["Dashboard is your mission control.", "Stats cards summarize ticket pressure at a glance.", "The activity feed highlights what needs human attention."],
+              actionTitle: "Open the dashboard",
+              actionBody: "Start with the overview to understand what AI handled and what still needs review.",
+              actionLabel: "Go to Dashboard",
+              action: () => switchSection("dashboard"),
+              secondaryLabel: "Next step",
+              secondaryAction: () => setGuideStep(Math.min(state.guideStep + 1, getGuideStepsData().length - 1)),
+            },
+            {
+              title: "Review AI triage decisions",
+              badge: "Human in the loop",
+              body: "Admins inspect ticket details to validate category detection, priority, customer sentiment, and AI draft responses.",
+              tips: ["Ticket details show a full timeline.", "AI suggestions are visible beside the status tracker.", "Manual review is expected for escalated or low-confidence cases."],
+              actionTitle: "Inspect a ticket",
+              actionBody: "Open a ticket detail view and confirm the AI recommendation before responding.",
+              actionLabel: "Open Ticket Details",
+              action: () => {
+                state.selectedTicketId = 1025;
+                renderTicketDetails();
+                switchSection("ticketDetails");
+              },
+              secondaryLabel: "Next step",
+              secondaryAction: () => setGuideStep(Math.min(state.guideStep + 1, getGuideStepsData().length - 1)),
+            },
+            {
+              title: "Resolve through chat and actions",
+              badge: "Fast handoff",
+              body: "When AI cannot fully resolve the issue, admins use chat, suggested replies, and assignments to close the loop quickly.",
+              tips: ["AI Suggestion drafts a reply inside chat.", "Admins can respond directly from the same workspace.", "Chat plus ticket context keeps conversations efficient."],
+              actionTitle: "Open live chat",
+              actionBody: "Move into the chat workspace and see how AI-assisted responses help admins close escalations faster.",
+              actionLabel: "Open Chat",
+              action: () => switchSection("chat"),
+              secondaryLabel: "Next step",
+              secondaryAction: () => setGuideStep(Math.min(state.guideStep + 1, getGuideStepsData().length - 1)),
+            },
+            {
+              title: "Return for every support cycle",
+              badge: "Built for repeat use",
+              body: "Admins keep coming back because analytics, exports, settings, and live queues stay in one repeatable support system.",
+              tips: ["Export reports for quick summaries.", "Settings control automation behavior.", "How It Works remains available for onboarding future teammates."],
+              actionTitle: "Complete admin onboarding",
+              actionBody: "We will remember this tour and keep the guide available whenever you need to retrain or onboard someone new.",
+              actionLabel: "Finish Tour",
+              action: () => {
+                markGuideSeen();
+                closeModal(dom.guideModal);
+                showToast("Admin onboarding saved. Use How It Works anytime.", "success");
+              },
+              secondaryLabel: "Export report",
+              secondaryAction: exportReport,
+            },
+          ];
+    }
+
+    function setGuideStep(index) {
+      const steps = getGuideStepsData();
+      state.guideStep = Math.max(0, Math.min(index, steps.length - 1));
+      const step = steps[state.guideStep];
+      dom.guideIntro.textContent = state.authRole === "user"
+        ? "Start as a customer, describe your issue, and let AI route it quickly."
+        : "Start as an admin, review AI triage, and step in when escalation is needed.";
+      dom.guideProgress.innerHTML = steps.map((item, itemIndex) => `
+        <button data-guide-step="${itemIndex}" class="guide-progress-btn rounded-full px-4 py-2 text-xs font-semibold transition ${itemIndex === state.guideStep ? "bg-indigo-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"}">
+          ${itemIndex + 1}. ${escapeHtml(item.title)}
+        </button>
+      `).join("");
+      dom.guideStepLabel.textContent = `Step ${state.guideStep + 1} of ${steps.length}`;
+      dom.guideStepTitle.textContent = step.title;
+      dom.guideStepBadge.textContent = step.badge;
+      dom.guideStepBody.textContent = step.body;
+      dom.guideStepTips.innerHTML = step.tips.map((tip) => `
+        <div class="flex items-start gap-3 rounded-2xl bg-white px-4 py-3 dark:bg-slate-950">
+          <i class="fa-solid fa-circle-check mt-1 text-emerald-500"></i>
+          <p class="text-sm leading-6 text-slate-500 dark:text-slate-400">${escapeHtml(tip)}</p>
+        </div>
+      `).join("");
+      dom.guideActionTitle.textContent = step.actionTitle;
+      dom.guideActionBody.textContent = step.actionBody;
+      dom.guideActionBtn.textContent = step.actionLabel;
+      dom.guideSecondaryBtn.textContent = step.secondaryLabel;
+      dom.guidePrevBtn.disabled = state.guideStep === 0;
+      dom.guidePrevBtn.classList.toggle("opacity-50", state.guideStep === 0);
+      dom.guidePrevBtn.classList.toggle("cursor-not-allowed", state.guideStep === 0);
+      dom.guideNextBtn.textContent = state.guideStep === steps.length - 1 ? "Complete Tour" : "Next Step";
+      dom.guideRewardCard.innerHTML = `
+        <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">${state.authRole === "user" ? "Why users return" : "Why admins return"}</p>
+        <p class="mt-3 text-sm leading-7 text-slate-500 dark:text-slate-400">
+          ${escapeHtml(state.authRole === "user"
+            ? "A quick way to raise any new query, follow progress, and keep everything in one support timeline."
+            : "A single place to review AI outcomes, resolve exceptions, and keep the support pipeline under control.")}
+        </p>
+      `;
+      document.querySelectorAll(".guide-progress-btn").forEach((button) => {
+        button.addEventListener("click", () => setGuideStep(Number(button.dataset.guideStep)));
+      });
+    }
+
+    function renderGuideModal() {
+      setGuideStep(state.guideStep || 0);
+    }
+
+    function markGuideSeen() {
+      try {
+        window.localStorage.setItem(getGuideStorageKey(), "1");
+      } catch (error) {
+        // Ignore storage issues in restricted browsers.
+      }
+    }
+
+    function shouldShowGuide() {
+      try {
+        return window.localStorage.getItem(getGuideStorageKey()) !== "1";
+      } catch (error) {
+        return true;
+      }
+    }
+
+    function renderProfileModal() {
+      const profile = getCurrentProfile();
+      dom.profileModalContent.innerHTML = `
+        <div class="rounded-[1.75rem] bg-slate-50 p-5 dark:bg-slate-900">
+          <p class="text-sm text-slate-500 dark:text-slate-400">Photo</p>
+          <div class="mt-3 flex items-center gap-4">
+            <img id="profileModalAvatarPreview" src="${escapeHtml(profile.avatar)}" alt="${escapeHtml(profile.name)} avatar" class="h-20 w-20 rounded-3xl object-cover" />
+            <div class="flex-1 space-y-3">
+              <input id="profileAvatarUrlInput" type="text" value="${escapeHtml(profile.avatar)}" class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:focus:ring-indigo-500/20" placeholder="Paste image URL" />
+              <input id="profileAvatarFileInput" type="file" accept="image/*" class="block w-full text-sm text-slate-500 file:mr-4 file:rounded-2xl file:border-0 file:bg-indigo-50 file:px-4 file:py-2 file:font-semibold file:text-indigo-700 dark:file:bg-indigo-500/10 dark:file:text-indigo-100" />
+            </div>
+          </div>
+        </div>
+        <div class="rounded-[1.75rem] bg-slate-50 p-5 dark:bg-slate-900">
+          <p class="text-sm text-slate-500 dark:text-slate-400">Name</p>
+          <input id="profileNameInput" type="text" value="${escapeHtml(profile.name)}" class="mt-3 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:focus:ring-indigo-500/20" />
+          <p class="mt-4 text-sm text-slate-500 dark:text-slate-400">Role</p>
+          <p class="mt-2 font-semibold">${escapeHtml(profile.roleLabel)}</p>
+        </div>
+        <div class="rounded-[1.75rem] bg-slate-50 p-5 dark:bg-slate-900">
+          <p class="text-sm text-slate-500 dark:text-slate-400">Email</p>
+          <p class="mt-2 font-semibold">${escapeHtml(profile.email)}</p>
+          <p class="mt-4 text-sm text-slate-500 dark:text-slate-400">Primary workflow</p>
+          <p class="mt-2 font-semibold">${state.authRole === "user" ? "Create tickets and follow updates" : "Review AI output and resolve escalations"}</p>
+        </div>
+        <div class="rounded-[1.75rem] bg-slate-50 p-5 dark:bg-slate-900">
+          <p class="text-sm text-slate-500 dark:text-slate-400">Save changes</p>
+          <p class="mt-2 text-sm leading-7 text-slate-500 dark:text-slate-400">Update the display name and photo used in the navbar, profile menu, and future user-submitted queries.</p>
+          <button id="saveProfileBtn" class="mt-5 rounded-2xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-500">Save Profile</button>
+        </div>
+      `;
+      const avatarUrlInput = document.getElementById("profileAvatarUrlInput");
+      const avatarFileInput = document.getElementById("profileAvatarFileInput");
+      const avatarPreview = document.getElementById("profileModalAvatarPreview");
+      const nameInput = document.getElementById("profileNameInput");
+      const saveBtn = document.getElementById("saveProfileBtn");
+      avatarUrlInput.addEventListener("input", () => {
+        avatarPreview.src = avatarUrlInput.value.trim() || profile.avatar;
+      });
+      avatarFileInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          avatarPreview.src = reader.result;
+          avatarUrlInput.value = reader.result;
+        };
+        reader.readAsDataURL(file);
+      });
+      saveBtn.addEventListener("click", () => {
+        const previousName = profile.name;
+        const nextName = nameInput.value.trim() || profile.name;
+        const nextAvatar = avatarUrlInput.value.trim() || profile.avatar;
+        state.profiles[state.authRole] = { ...profile, name: nextName, avatar: nextAvatar };
+        if (state.authRole === "user") {
+          state.tickets = state.tickets.map((ticket) => ticket.customer === previousName ? { ...ticket, customer: nextName } : ticket);
+          state.conversations = state.conversations.map((conversation) =>
+            conversation.name === previousName ? { ...conversation, name: nextName, avatar: nextAvatar } : conversation
+          );
+        } else {
+          state.tickets = state.tickets.map((ticket) => ticket.owner === previousName ? { ...ticket, owner: nextName } : ticket);
+        }
+        renderRoleExperience();
+        renderTickets();
+        renderTicketDetails();
+        renderConversations();
+        renderChat();
+        closeModal(dom.profileModal);
+        showToast("Profile updated successfully", "success");
+      });
+    }
+
+    function renderSecurityModal() {
+      const items = state.authRole === "user"
+        ? [
+            { title: "Session protection", body: "User sessions are protected with secure sign-in and notification-based updates." },
+            { title: "Ticket privacy", body: "Submitted ticket data stays scoped to the customer workspace and assigned support team." },
+            { title: "Escalation path", body: "If AI confidence is low, the request is routed to an admin for manual review." },
+          ]
+        : [
+            { title: "Admin access", body: "Admins can review escalated tickets, analytics, chat transcripts, and automation settings." },
+            { title: "Review checkpoints", body: "Low-confidence AI actions remain gated behind human review before final response." },
+            { title: "Audit readiness", body: "Exports, assignment activity, and ticket timelines provide a demo-friendly audit trail." },
+          ];
+      dom.securityModalContent.innerHTML = items.map((item) => `
+        <div class="rounded-[1.75rem] bg-slate-50 p-5 dark:bg-slate-900">
+          <p class="font-semibold">${escapeHtml(item.title)}</p>
+          <p class="mt-2 text-sm leading-7 text-slate-500 dark:text-slate-400">${escapeHtml(item.body)}</p>
+        </div>
+      `).join("");
+    }
+
+    function exportReport() {
+      const report = [
+        "AI Support Hub Demo Export",
+        `Role: ${state.authRole}`,
+        `Generated: ${new Date().toLocaleString()}`,
+        "",
+        "Ticket Summary",
+        `Total Tickets: ${state.tickets.length}`,
+        `Open or In Progress: ${state.tickets.filter((ticket) => ticket.status !== "Resolved").length}`,
+        `Resolved: ${state.tickets.filter((ticket) => ticket.status === "Resolved").length}`,
+        "",
+        "Recent Tickets",
+        ...state.tickets.map((ticket) => `#${ticket.id} | ${ticket.title} | ${ticket.category} | ${ticket.priority} | ${ticket.status}`),
+      ].join("\n");
+      const blob = new Blob([report], { type: "text/plain;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `ai-support-hub-report-${state.authRole}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      URL.revokeObjectURL(link.href);
+      link.remove();
+      showToast("Report exported successfully", "success");
+    }
+
+    function toggleVoiceInput(target = "description") {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        dom.voiceInputStatus.textContent = "Voice input is not supported in this browser";
+        showToast("Voice input is not supported in this browser", "info");
+        return;
+      }
+      if (state.voiceListening && state.activeRecognition) {
+        state.activeRecognition.stop();
+        return;
+      }
+      state.voiceTarget = target;
+      const recognition = new SpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.interimResults = true;
+      recognition.continuous = false;
+      const targetInput = target === "title" ? dom.ticketTitleInput : dom.ticketDescriptionInput;
+      const baseText = targetInput.value.trim();
+      let finalTranscript = "";
+      recognition.onstart = () => {
+        state.voiceListening = true;
+        state.activeRecognition = recognition;
+        dom.voiceInputBtn.innerHTML = `<i class="fa-solid fa-microphone${target === "description" ? "-lines" : ""}"></i> ${target === "description" ? "Listening" : "Mic Ready"}`;
+        dom.voiceTitleBtn.innerHTML = `<i class="fa-solid fa-microphone${target === "title" ? "-lines" : ""}"></i> ${target === "title" ? "Listening" : "Voice Title"}`;
+        dom.voiceInputStatus.textContent = target === "title" ? "Listening for a short ticket title..." : "Listening... speak your issue";
+      };
+      recognition.onresult = (event) => {
+        let interim = "";
+        for (let i = event.resultIndex; i < event.results.length; i += 1) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) finalTranscript += `${transcript} `;
+          else interim += transcript;
+        }
+        targetInput.value = `${baseText} ${finalTranscript || interim}`.trim();
+        analyzeTicketDraft();
+      };
+      recognition.onerror = () => {
+        dom.voiceInputStatus.textContent = "Voice capture failed. Please try again.";
+        state.voiceListening = false;
+        state.activeRecognition = null;
+        dom.voiceInputBtn.innerHTML = '<i class="fa-solid fa-microphone"></i> Speak';
+        dom.voiceTitleBtn.innerHTML = '<i class="fa-solid fa-microphone"></i> Voice Title';
+      };
+      recognition.onend = () => {
+        state.voiceListening = false;
+        state.activeRecognition = null;
+        dom.voiceInputBtn.innerHTML = '<i class="fa-solid fa-microphone"></i> Speak';
+        dom.voiceTitleBtn.innerHTML = '<i class="fa-solid fa-microphone"></i> Voice Title';
+        dom.voiceInputStatus.textContent = "Voice input ready";
+      };
+      recognition.start();
+    }
+
+    function switchSection(section, options = { withSkeleton: true }) {
+      state.currentSection = section;
+      document.querySelectorAll(".nav-item").forEach((item) => {
+        const active = item.dataset.section === section || (section === "ticketDetails" && item.dataset.section === "tickets");
+        item.className = `nav-item flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold transition ${active ? "bg-slate-950 text-white shadow-glow dark:bg-indigo-600" : "hover:bg-slate-100 dark:hover:bg-slate-900"}`;
+      });
+      const sectionMap = {
+        dashboard: document.getElementById("dashboardSection"),
+        tickets: document.getElementById("ticketsSection"),
+        ticketDetails: document.getElementById("ticketDetailsSection"),
+        "create-ticket": document.getElementById("create-ticketSection"),
+        chat: document.getElementById("chatSection"),
+        analytics: document.getElementById("analyticsSection"),
+        settings: document.getElementById("settingsSection"),
+      };
+      Object.values(sectionMap).forEach((element) => element.classList.add("hidden"));
+      if (options.withSkeleton) {
+        dom.contentSkeleton.classList.remove("hidden");
+        setTimeout(() => {
+          dom.contentSkeleton.classList.add("hidden");
+          sectionMap[section].classList.remove("hidden");
+          renderSection(section);
+        }, 420);
+      } else {
+        sectionMap[section].classList.remove("hidden");
+        renderSection(section);
+      }
+      dom.sidebar.classList.add("-translate-x-full");
+      dom.mobileSidebarBackdrop.classList.add("hidden");
+    }
+
+    function renderSection(section) {
+      if (section === "dashboard") { renderStats(); renderActivityFeed(); renderCharts(); }
+      if (section === "tickets") renderTickets();
+      if (section === "ticketDetails") renderTicketDetails();
+      if (section === "create-ticket") analyzeTicketDraft();
+      if (section === "chat") { renderConversations(); renderChat(); }
+      if (section === "analytics") renderCharts();
+    }
+
+    function chartPalette() {
+      return state.darkMode
+        ? { text: "#cbd5e1", grid: "rgba(148,163,184,0.12)", base: "#6366f1", accent: "#22d3ee", success: "#34d399", rose: "#fb7185", amber: "#fbbf24" }
+        : { text: "#475569", grid: "rgba(148,163,184,0.18)", base: "#4f46e5", accent: "#06b6d4", success: "#10b981", rose: "#f43f5e", amber: "#f59e0b" };
+    }
+
+    function buildChart(chartKey, canvasId, configFactory) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      if (state.charts[chartKey]) state.charts[chartKey].destroy();
+      state.charts[chartKey] = new Chart(canvas, configFactory(canvas.getContext("2d")));
+    }
+
+    function renderCharts() {
+      const palette = chartPalette();
+      buildChart("dashboard", "dashboardChart", (ctx) => {
+        const gradient = ctx.createLinearGradient(0, 0, 0, 280);
+        gradient.addColorStop(0, "rgba(99, 102, 241, 0.35)");
+        gradient.addColorStop(1, "rgba(99, 102, 241, 0.02)");
+        return {
+          type: "line",
+          data: {
+            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            datasets: [
+              { label: "Tickets Created", data: [22, 29, 25, 34, 30, 26, 32], borderColor: palette.base, backgroundColor: gradient, fill: true, tension: 0.38, borderWidth: 3, pointRadius: 0 },
+              { label: "Resolved", data: [18, 21, 20, 28, 27, 24, 30], borderColor: palette.accent, fill: false, tension: 0.38, borderWidth: 3, pointRadius: 0 },
+            ],
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: palette.text, usePointStyle: true, boxWidth: 10 } } },
+            scales: { x: { ticks: { color: palette.text }, grid: { display: false } }, y: { ticks: { color: palette.text }, grid: { color: palette.grid } } },
+          },
+        };
+      });
+      if (!document.getElementById("analyticsSection").classList.contains("hidden")) {
+        buildChart("ticketsTime", "ticketsTimeChart", () => ({
+          type: "line",
+          data: {
+            labels: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6"],
+            datasets: [
+              { label: "Inbound", data: [124, 142, 136, 160, 154, 172], borderColor: palette.base, backgroundColor: "rgba(99,102,241,0.18)", fill: true, tension: 0.35, borderWidth: 3 },
+              { label: "Resolved", data: [98, 118, 121, 139, 145, 161], borderColor: palette.success, backgroundColor: "rgba(16,185,129,0.12)", fill: true, tension: 0.35, borderWidth: 3 },
+            ],
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: palette.text } } },
+            scales: { x: { ticks: { color: palette.text }, grid: { display: false } }, y: { ticks: { color: palette.text }, grid: { color: palette.grid } } },
+          },
+        }));
+        buildChart("resolutionRate", "resolutionRateChart", () => ({
+          type: "doughnut",
+          data: { labels: ["Resolved", "Pending", "Escalated"], datasets: [{ data: [72, 18, 10], backgroundColor: [palette.success, palette.base, palette.rose], borderWidth: 0 }] },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom", labels: { color: palette.text, usePointStyle: true, boxWidth: 10 } } }, cutout: "72%" },
+        }));
+        buildChart("responseTime", "responseTimeChart", () => ({
+          type: "bar",
+          data: { labels: ["Email", "Chat", "Phone", "Social"], datasets: [{ label: "Avg Minutes", data: [18, 6, 4, 11], borderRadius: 16, backgroundColor: [palette.base, palette.accent, palette.success, palette.amber] }] },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: palette.text }, grid: { display: false } }, y: { ticks: { color: palette.text }, grid: { color: palette.grid } } } },
+        }));
+      }
+    }
+
+    function createTicketFromForm(event) {
+      event.preventDefault();
+      const profile = getCurrentProfile();
+      const newTicket = {
+        id: Math.max(...state.tickets.map((ticket) => ticket.id)) + 1,
+        title: dom.ticketTitleInput.value.trim(),
+        category: dom.ticketCategorySelect.value,
+        priority: dom.ticketPrioritySelect.value,
+        status: "Open",
+        date: "Apr 07, 2026",
+        customer: profile.name,
+        owner: state.authRole === "admin" ? profile.name : "AI Triage Queue",
+        sentiment: dom.createAiSummary.textContent.includes("negative") ? "Negative" : "Positive",
+        autoResolve: dom.createAiSummary.textContent.includes("automated resolution"),
+        description: dom.ticketDescriptionInput.value.trim(),
+        aiCategory: dom.ticketCategorySelect.value,
+        responseTime: "0 min",
+        suggestion: "Thanks for reaching out. We've received your ticket and routed it to the right queue. An agent will review the context and follow up with next steps shortly.",
+        timeline: [
+          { time: "Now", title: "Ticket created", body: "Submitted through the new ticket form." },
+          { time: "Now", title: "AI triage queued", body: "Category, urgency, and sentiment analysis attached." },
+          { time: "Now", title: "Awaiting assignment", body: "Ticket is ready for queue-based routing." }
+        ],
+      };
+      state.tickets.unshift(newTicket);
+      if (state.authRole === "user") addAdminVisibilityForTicket(newTicket, "ticket form");
+      if (state.activeRecognition) state.activeRecognition.stop();
+      dom.createTicketForm.reset();
+      dom.uploadedFileName.textContent = "PNG, JPG, PDF up to 10MB";
+      dom.voiceInputStatus.textContent = "Voice input ready";
+      dom.voiceTitleBtn.innerHTML = '<i class="fa-solid fa-microphone"></i> Voice Title';
+      state.selectedTicketId = newTicket.id;
+      analyzeTicketDraft();
+      renderStats();
+      renderTickets();
+      renderActivityFeed();
+      showToast(`Ticket #${newTicket.id} created successfully`, "success");
+      switchSection("tickets");
+    }
+
+    function generateCustomerReply(conversation, agentMessage) {
+      const text = agentMessage.toLowerCase();
+      const category = conversation.company.toLowerCase();
+
+      if (text.includes("hi") || text.includes("hello") || text === "hey") {
+        return "Hello, I wanted to check whether there is any update on my request.";
+      }
+      if (text.includes("eta") || text.includes("update") || text.includes("shortly")) {
+        return "Understood. Could you share the expected timeline for the next update?";
+      }
+      if (text.includes("refund") || text.includes("charge") || text.includes("billing") || category.includes("billing")) {
+        return "That helps. Please let me know once the billing team confirms whether the charge alert was only cosmetic.";
+      }
+      if (text.includes("engineering") || text.includes("investigating") || text.includes("incident") || category.includes("technical")) {
+        return "Got it. I have shared the latest details from our side, so please keep me posted when engineering confirms the fix.";
+      }
+      if (text.includes("attached") || text.includes("file") || text.includes("log") || text.includes("screenshot")) {
+        return "I can see that. If you need anything else from me, I can upload more details right away.";
+      }
+      if (text.includes("feature") || category.includes("feature")) {
+        return "Thanks for logging that. Please keep this request attached to our account context for product review.";
+      }
+      if (text.includes("resolved") || text.includes("fixed") || text.includes("done")) {
+        return "I will test it on my side now and confirm if everything is working as expected.";
+      }
+      return "Understood. Please keep me posted on the next step so I know what to expect.";
+    }
+
+    function sendChatMessage(event) {
+      event.preventDefault();
+      const text = dom.chatInput.value.trim();
+      if (!text) return;
+      let conversation = state.conversations.find((item) => item.id === state.activeConversationId);
+      if (!conversation && state.authRole === "user") {
+        conversation = ensureUserConversation();
+        state.activeConversationId = conversation.id;
+      }
+      if (!conversation) return;
+      const timestamp = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      const sender = state.authRole === "admin" ? "agent" : "customer";
+      conversation.messages.push({ sender, text, time: timestamp });
+      conversation.preview = text;
+      conversation.status = state.authRole === "admin" ? "Admin replied" : "Waiting for admin";
+      if (!conversation.customerName) conversation.customerName = conversation.name;
+      dom.chatInput.value = "";
+      if (state.authRole === "user") {
+        state.notifications.unshift({
+          icon: "fa-paper-plane",
+          title: "Your message was sent to admin",
+          body: "The admin queue can now see and reply to your latest support message.",
+          time: "Just now",
+        });
+      } else {
+        state.notifications.unshift({
+          icon: "fa-reply",
+          title: `Admin replied to ${conversation.customerName || conversation.name}`,
+          body: "The shared thread has been updated with your latest response.",
+          time: "Just now",
+        });
+      }
+      renderNotifications();
+      renderConversations();
+      renderChat();
+      if (state.authRole === "admin" && (conversation.customerName || conversation.name) !== state.profiles.user.name) {
+        dom.chatTypingIndicator.classList.remove("hidden");
+        setTimeout(() => {
+          const customerReply = generateCustomerReply(conversation, text);
+          conversation.messages.push({
+            sender: "customer",
+            text: customerReply,
+            time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+          });
+          conversation.preview = customerReply;
+          conversation.status = "Customer replied";
+          dom.chatTypingIndicator.classList.add("hidden");
+          renderConversations();
+          renderChat();
+        }, 1200);
+      }
+    }
+
+    function insertAiSuggestion() {
+      dom.chatTypingIndicator.classList.remove("hidden");
+      setTimeout(() => {
+        dom.chatInput.value = "Thanks for the update. I've attached your case to the active incident and will share the next milestone as soon as engineering confirms the fix path.";
+        dom.chatTypingIndicator.classList.add("hidden");
+        showToast("AI suggestion inserted into the reply box", "info");
+      }, 900);
+    }
+
+    function useTicketSuggestion() {
+      dom.aiThinkingState.classList.remove("hidden");
+      setTimeout(() => {
+        dom.aiThinkingState.classList.add("hidden");
+        showToast("AI suggestion applied to response workflow", "success");
+      }, 1100);
+    }
+
+    function seedCreateTicketForm() {
+      dom.ticketTitleInput.value = "Customer charged twice after upgrade";
+      dom.ticketDescriptionInput.value = "Customer says they were charged twice after upgrading the workspace. They sound frustrated and want an urgent billing review before finance closes today.";
+      dom.ticketCategorySelect.value = "Billing";
+      dom.ticketPrioritySelect.value = "High";
+      analyzeTicketDraft();
+    }
+
+    function handleGlobalSearch() {
+      const query = dom.globalSearch.value.trim().toLowerCase();
+      state.ticketSearch = query;
+      state.conversationSearch = query;
+      dom.ticketSearchInput.value = query;
+      dom.conversationSearchInput.value = query;
+      if (state.currentSection === "tickets") renderTickets();
+      if (state.currentSection === "chat") { renderConversations(); renderChat(); }
+    }
+
+    function respondToFaq(label) {
+      const responses = {
+        "Billing issue": "I can help with duplicate charges, invoices, refunds, and plan changes. If this is your issue, ask Copilot in the box below and I can create a billing ticket visible to the admin team.",
+        "Reset password": "If you cannot access your account, Copilot can guide you and create an account access ticket so an admin can review it securely.",
+        "Downtime": "For downtime or bugs, Copilot marks the issue as technical and can raise it into the admin review queue with higher priority.",
+      };
+      state.chatbotHistory.push({ sender: "user", text: label });
+      state.chatbotHistory.push({ sender: "bot", text: responses[label] || "Copilot can help with that. Describe the query below and I will guide you." });
+      renderChatbotMessages();
+    }
+
+    function attachEvents() {
+      dom.loginModeBtn.addEventListener("click", () => updateAuthMode("login"));
+      dom.signupModeBtn.addEventListener("click", () => updateAuthMode("signup"));
+      dom.authRoleUserBtn.addEventListener("click", () => updateAuthRole("user"));
+      dom.authRoleAdminBtn.addEventListener("click", () => updateAuthRole("admin"));
+      dom.authForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const profile = getCurrentProfile();
+        dom.authScreen.classList.add("hidden");
+        dom.appShell.classList.remove("hidden");
+        ensureUserConversation();
+        renderRoleExperience();
+        switchSection(profile.landingSection, { withSkeleton: false });
+        renderNotifications();
+        renderGuideModal();
+        renderProfileModal();
+        renderSecurityModal();
+        analyzeTicketDraft();
+        showToast(state.authMode === "login" ? `Welcome back, ${profile.name}` : `${profile.roleLabel} workspace created`, "success");
+        if (state.authRole === "admin") {
+          const pendingAdminQueries = state.tickets.filter((ticket) => ticket.owner === "AI Triage Queue" || ticket.owner === "Admin Review Queue").length;
+          if (pendingAdminQueries) showToast(`${pendingAdminQueries} user queries are waiting in the admin queue`, "info");
+        }
+        if (shouldShowGuide()) {
+          state.guideStep = 0;
+          renderGuideModal();
+          openModal(dom.guideModal);
+        }
+      });
+      dom.liveUserViewBtn.addEventListener("click", () => switchLiveRole("user"));
+      dom.liveAdminViewBtn.addEventListener("click", () => switchLiveRole("admin"));
+      document.querySelectorAll(".nav-item").forEach((item) => item.addEventListener("click", () => switchSection(item.dataset.section)));
+      dom.openSidebarBtn.addEventListener("click", () => {
+        dom.sidebar.classList.remove("-translate-x-full");
+        dom.mobileSidebarBackdrop.classList.remove("hidden");
+      });
+      dom.mobileSidebarBackdrop.addEventListener("click", () => {
+        dom.sidebar.classList.add("-translate-x-full");
+        dom.mobileSidebarBackdrop.classList.add("hidden");
+      });
+      dom.darkModeBtn.addEventListener("click", () => { state.darkMode = !state.darkMode; updateDarkMode(); });
+      dom.notificationsBtn.addEventListener("click", () => { dom.notificationsPanel.classList.toggle("hidden"); dom.profileMenu.classList.add("hidden"); });
+      dom.profileBtn.addEventListener("click", () => { dom.profileMenu.classList.toggle("hidden"); dom.notificationsPanel.classList.add("hidden"); });
+      document.addEventListener("click", (event) => {
+        if (!dom.notificationsPanel.contains(event.target) && !dom.notificationsBtn.contains(event.target)) dom.notificationsPanel.classList.add("hidden");
+        if (!dom.profileMenu.contains(event.target) && !dom.profileBtn.contains(event.target)) dom.profileMenu.classList.add("hidden");
+      });
+      dom.logoutBtn.addEventListener("click", () => {
+        if (state.activeRecognition) state.activeRecognition.stop();
+        dom.appShell.classList.add("hidden");
+        dom.authScreen.classList.remove("hidden");
+        showToast("Signed out of the demo workspace", "info");
+      });
+      dom.profileMenuBtn.addEventListener("click", () => {
+        renderProfileModal();
+        openModal(dom.profileModal);
+        dom.profileMenu.classList.add("hidden");
+      });
+      dom.securityMenuBtn.addEventListener("click", () => {
+        renderSecurityModal();
+        openModal(dom.securityModal);
+        dom.profileMenu.classList.add("hidden");
+      });
+      dom.ticketSearchInput.addEventListener("input", (event) => { state.ticketSearch = event.target.value; renderTickets(); });
+      dom.statusFilter.addEventListener("change", (event) => { state.ticketStatus = event.target.value; renderTickets(); });
+      dom.priorityFilter.addEventListener("change", (event) => { state.ticketPriority = event.target.value; renderTickets(); });
+      dom.backToTicketsBtn.addEventListener("click", () => switchSection("tickets"));
+      dom.useAiSuggestionBtn.addEventListener("click", useTicketSuggestion);
+      dom.createTicketForm.addEventListener("submit", createTicketFromForm);
+      dom.ticketTitleInput.addEventListener("input", analyzeTicketDraft);
+      dom.voiceTitleBtn.addEventListener("click", () => toggleVoiceInput("title"));
+      dom.ticketDescriptionInput.addEventListener("input", analyzeTicketDraft);
+      dom.voiceInputBtn.addEventListener("click", () => toggleVoiceInput("description"));
+      dom.ticketCategorySelect.addEventListener("change", analyzeTicketDraft);
+      dom.ticketPrioritySelect.addEventListener("change", analyzeTicketDraft);
+      dom.ticketFileUpload.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        dom.uploadedFileName.textContent = file ? `${file.name} selected` : "PNG, JPG, PDF up to 10MB";
+      });
+      dom.autofillSampleBtn.addEventListener("click", seedCreateTicketForm);
+      dom.conversationSearchInput.addEventListener("input", (event) => { state.conversationSearch = event.target.value; renderConversations(); });
+      dom.chatForm.addEventListener("submit", sendChatMessage);
+      dom.chatSuggestionBtn.addEventListener("click", insertAiSuggestion);
+      dom.chatbotToggle.addEventListener("click", () => dom.chatbotWindow.classList.toggle("hidden"));
+      dom.closeChatbotBtn.addEventListener("click", () => dom.chatbotWindow.classList.add("hidden"));
+      dom.chatbotForm.addEventListener("submit", sendChatbotQuery);
+      document.querySelectorAll(".faq-btn").forEach((button) => button.addEventListener("click", () => respondToFaq(button.textContent.trim())));
+      dom.chatbotCreateTicketBtn.addEventListener("click", () => {
+        dom.chatbotWindow.classList.add("hidden");
+        switchSection("create-ticket");
+      });
+      dom.openCreateFromDashboard.addEventListener("click", () => switchSection("create-ticket"));
+      dom.howItWorksBtn.addEventListener("click", () => {
+        state.guideStep = 0;
+        renderGuideModal();
+        openModal(dom.guideModal);
+      });
+      dom.exportReportBtn.addEventListener("click", exportReport);
+      dom.createTicketShortcut.addEventListener("click", () => switchSection("create-ticket"));
+      dom.globalSearch.addEventListener("input", handleGlobalSearch);
+      dom.guideActionBtn.addEventListener("click", () => {
+        const step = getGuideStepsData()[state.guideStep];
+        if (!step) return;
+        closeModal(dom.guideModal);
+        step.action();
+      });
+      dom.guideSecondaryBtn.addEventListener("click", () => {
+        const step = getGuideStepsData()[state.guideStep];
+        if (!step) return;
+        step.secondaryAction();
+      });
+      dom.guidePrevBtn.addEventListener("click", () => {
+        if (state.guideStep > 0) setGuideStep(state.guideStep - 1);
+      });
+      dom.guideNextBtn.addEventListener("click", () => {
+        const steps = getGuideStepsData();
+        if (state.guideStep >= steps.length - 1) {
+          markGuideSeen();
+          closeModal(dom.guideModal);
+          showToast("Onboarding completed. Reopen it anytime from How It Works.", "success");
+          return;
+        }
+        setGuideStep(state.guideStep + 1);
+      });
+      document.querySelectorAll("[data-close-modal]").forEach((button) => {
+        button.addEventListener("click", () => closeModal(document.getElementById(button.dataset.closeModal)));
+      });
+      [dom.guideModal, dom.profileModal, dom.securityModal].forEach((modal) => {
+        modal.addEventListener("click", (event) => {
+          if (event.target === modal) closeModal(modal);
+        });
+      });
+      window.addEventListener("resize", renderTickets);
+    }
+
+    attachEvents();
+    updateAuthMode("login");
+    updateDarkMode();
+    const initialUserConversation = ensureUserConversation();
+    if (state.authRole === "user") state.activeConversationId = initialUserConversation.id;
+    renderRoleExperience();
+    renderGuideModal();
+    renderProfileModal();
+    renderSecurityModal();
+    renderStats();
+    renderActivityFeed();
+    renderNotifications();
+    renderChatbotMessages();
+    analyzeTicketDraft();
+    renderTickets();
+    renderTicketDetails();
+    renderConversations();
+    renderChat();
+  </script>
+</body>
+</html>
